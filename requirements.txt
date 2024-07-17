@@ -1,0 +1,5 @@
+django == 4.1
+mysqlclient
+pymysql
+django_extensions
+load_dotenv

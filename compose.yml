@@ -1,0 +1,10 @@
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./mysite:/root/workspace
+    ports:
+      - "8000:8000"
