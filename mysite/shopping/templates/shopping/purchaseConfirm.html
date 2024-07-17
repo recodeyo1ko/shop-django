@@ -1,13 +1,40 @@
 {% load static %}
-<html>
-	<head>
-		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-		<title>商品の購入確認</title>
-		<link rel='stylesheet' type='text/css' href='{% static "shopping/css/style.css" %}' />
-	</head>
-	<body>
-
-		<!-- 任意機能 -->
-
-	</body>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>購入確認</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'shopping/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h1>購入確認</h1>
+    <table>
+      <tr>
+        <th>商品名</th>
+        <th>商品の色</th>
+        <th>メーカー名</th>
+        <th>単価</th>
+        <th>数量</th>
+      </tr>
+      {% for item in cart_items %}
+      <tr>
+        <td>{{ item.item.name }}</td>
+        <td>{{ item.item.color }}</td>
+        <td>{{ item.item.manufacturer }}</td>
+        <td>{{ item.item.price }}円</td>
+        <td>{{ item.amount }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p>合計金額: {{ total_price }}円</p>
+    <form method="POST" action="/shopping/purchaseCommit/">
+      {% csrf_token %}
+      <button type="submit">購入を確定する</button>
+    </form>
+    <a href="/shopping/cart/">カートに戻る</a>
+  </body>
 </html>

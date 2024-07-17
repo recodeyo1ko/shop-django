@@ -1,4 +1,5 @@
 from django.db import models
+from account.models import User
 
 class Category(models.Model): 
   category_id = models.IntegerField(primary_key=True, unique=True) #PK
@@ -41,8 +42,12 @@ class ItemsInCart(models.Model):
   verbose_name = "ショッピングカート" 
   verbose_name_plural = "ショッピングカート" 
 
-# # class Purchase(models.Model): 
-# # 任意機能
+class Purchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_price = models.IntegerField(default=0.0)
+    purchase_date = models.DateTimeField(auto_now_add=True)
 
-# # class PurchaseDetail(models.Model): 
-# # 任意機能
+class PurchaseDetail(models.Model):
+    purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    amount = models.IntegerField()

@@ -1,13 +1,59 @@
 {% load static %}
-<html>
-	<head>
-		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-		<title>購入履歴</title>
-		<link rel='stylesheet' type='text/css' href='{% static "shopping/css/style.css" %}' />
-	</head>
-	<body>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>購入履歴</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'shopping/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h1>購入履歴</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>注文ID</th>
+          <th>注文日時</th>
+          <th>注文詳細</th>
+          <th>合計金額</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+        <tr>
+          <td>{{ purchase.id }}</td>
+          <td>{{ purchase.purchase_date }}</td>
+          <td>
+            <table class="nested-table">
+              <thead>
+                <tr>
+                  <th>商品名</th>
+                  <th>価格</th>
+                  <th>数量</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in purchase.purchasedetail_set.all %}
+                <tr>
+                  <td>{{ item.item.name }}</td>
+                  <td>{{ item.item.price }}</td>
+                  <td>{{ item.amount }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </td>
+          <td>{{ purchase.total_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
-		<!-- 任意機能 -->
-
-	</body>
+    <a href="/shopping/cart/">カートに戻る</a>
+    <br />
+    <a href="/">商品検索</a>へ<br />
+  </body>
 </html>

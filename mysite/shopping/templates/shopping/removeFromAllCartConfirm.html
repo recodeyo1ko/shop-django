@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>カートを空にする</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'shopping/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h1>カートを空にする</h1>
+    <p>本当にカート内のすべての商品を削除しますか？</p>
+    <form method="POST" action="/shopping/removeFromAllCartCommit/">
+      {% csrf_token %}
+      <button type="submit">はい、削除します</button>
+    </form>
+    <br />
+    <a href="/shopping/cart/">いいえ、キャンセルします</a>
+  </body>
+</html>

@@ -71,7 +71,7 @@ def add_to_cart(request):
         item_id = int(request.POST.get('itemId'))
         amount = int(request.POST.get('amount'))
         user = User.objects.get(user_id=user_id) #from account.models import Userにより別アプリのモデルが使える
-        if models.ItemsInCart.objects.filter(item_id=item_id).exists():
+        if models.ItemsInCart.objects.filter(user_id=user_id, item_id=item_id).exists():
             items_in_cart = models.ItemsInCart.objects.get(item_id=item_id, user_id=user_id)
             items_in_cart.amount += int(amount)
             items_in_cart.booked_date = timezone.now()
@@ -114,43 +114,124 @@ def cart(request):
 def amount_in_cart(request): 
     if not request.session.get('is_login', None):
         return redirect("/account/login/") 
-    if request.method == 'POST': #POST通信 
+    
+    if request.method == 'POST':  # POST通信 
         user_id = request.session['user_id'] 
         item_id = int(request.POST.get('itemId'))
         amount = int(request.POST.get('amount'))
-        item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
-    if item_in_cart:
-        item_in_cart.amount = amount 
-        item_in_cart.save()
-    return redirect('/shopping/cart/')
-
-def updateItemInCart(request,item_id):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/") 
-    if request.method == 'POST': #POST通信 
-        user_id = request.session['user_id'] 
-        item_id = int(request.POST.get('itemId'))
-        amount = int(request.POST.get('amount'))
-        item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
-    if item_in_cart:
-        item_in_cart.amount = amount 
-        item_in_cart.save()
+        try:
+            item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
+            item_in_cart.amount = amount 
+            item_in_cart.save()
+        except models.ItemsInCart.DoesNotExist:
+            pass  # アイテムが存在しない場合は何もしない
+    
     return redirect('/shopping/cart/')
                 
-def remove_from_cart(request,item_id):
-    pass #任意機能 
+def remove_from_cart(request, item_id):
+    print(  "remove_from_cart")
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    user_id = request.session['user_id']
+    try:
+        item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
+    except models.ItemsInCart.DoesNotExist:
+        message = '商品がカートに存在しません'
+        return redirect('/shopping/cart/')
+    
+    return render(request, 'shopping/removeFromCartConfirm.html', {'item': item_in_cart})
 
 def remove_from_cart_commit(request):
-    pass  # 任意機能 
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
     
-def purchase(request): 
-    pass # 任意機能
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        item_id = int(request.POST.get('item_id'))
+        try:
+            item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
+            item_in_cart.delete()
+            message = '商品がカートから削除されました'
+        except models.ItemsInCart.DoesNotExist:
+            message = '商品がカートに存在しませんでした'
+        return render(request, 'shopping/removeFromCartCommit.html', {'message': message})
+    
+    return redirect('/shopping/cart/')
 
-def purchase_commit(request): 
-    pass # 任意機能 
 
-def purchase_history(request): 
-    pass # 任意機能 
+def remove_from_all_cart(request):
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    
+    return render(request, 'shopping/removeFromAllCartConfirm.html')
+
+def remove_from_all_cart_commit(request):
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        models.ItemsInCart.objects.filter(user_id=user_id).delete()
+        message = 'すべての商品がカートから削除されました'
+        return render(request, 'shopping/removeFromAllCartCommit.html', {'message': message})
+    
+    return redirect('/shopping/cart/')
+
+    
+def purchase(request):
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    
+    user_id = request.session['user_id']
+    cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
+    if not cart_items.exists():
+        message = 'カートが空です。'
+        return redirect('/shopping/cart/')
+    
+    total_price = sum(item.item.price * item.amount for item in cart_items)
+    
+    return render(request, 'shopping/purchaseConfirm.html', {'cart_items': cart_items, 'total_price': total_price})
+
+def purchase_commit(request):
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
+        if not cart_items.exists():
+            message = 'カートが空です。'
+            return redirect('/shopping/cart/')
+        purchase = models.Purchase(user_id=user_id)
+        purchase.total_price = sum(item.item.price * item.amount for item in cart_items)
+        purchase.save()
+        
+        for item in cart_items:
+            purchase_detail = models.PurchaseDetail(
+                purchase=purchase,
+                item=item.item,
+                amount=item.amount
+            )
+            purchase_detail.save()
+            
+            item.item.stock -= item.amount
+            item.item.save()
+        cart_items.delete()
+        
+        message = '購入が完了しました。'
+        return render(request, 'shopping/purchaseCommit.html', {'message': message})
+    
+    return redirect('/shopping/cart/')
+
+def purchase_history(request):
+    if not request.session.get('is_login', None):
+        return redirect("/account/login/")
+    
+    user_id = request.session['user_id']
+    purchases = models.Purchase.objects.filter(user_id=user_id).order_by('-purchase_date')
+    purchase_details = models.PurchaseDetail.objects.filter(purchase__in=purchases)
+    
+    return render(request, 'shopping/purchaseHistory.html', {'purchases': purchases, 'purchase_details': purchase_details})
                 
 def purchase_cancel(request,purchase_id):
     pass # 任意機能 

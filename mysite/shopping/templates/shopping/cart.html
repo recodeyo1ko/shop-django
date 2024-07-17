@@ -19,42 +19,36 @@
         <th>メーカー名</th>
         <th>単価</th>
         <th>数量</th>
+        <th>削除</th>
       </tr>
-      {%for line in form%}
+      {% for line in form %}
       <tr>
-        <td>{{line.name}}</td>
-        <td>{{line.color}}</td>
-        <td>{{line.manufacturer}}</td>
-        <td>{{line.price}}円</td>
-
+        <td>{{ line.name }}</td>
+        <td>{{ line.color }}</td>
+        <td>{{ line.manufacturer }}</td>
+        <td>{{ line.price }}円</td>
         <td>
-          <form
-            action="/shopping/updateItemInCart/{{line.item_id}}/"
-            method="POST"
-          >
+          <form method="POST" action="/shopping/amountInCart/">
             {% csrf_token %}
-            <select name="amount" id="amount">
-              <option disabled selected value="{{ line.amount }}">
-                {{line.amount}}
-              </option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-            </select>
-            個
-            <br />
-            <input type="submit" value="更新" />
+            <input type="hidden" name="itemId" value="{{ line.item_id }}" />
+            <input
+              type="number"
+              name="amount"
+              value="{{ line.amount }}"
+              min="1"
+              max="{{ line.stock }}"
+            />
+            <button type="submit">更新</button>
           </form>
         </td>
+        <td><a href="/shopping/removeFromCart/{{ line.item_id }}/">削除</a></td>
       </tr>
       {% endfor %}
     </table>
+    <form method="POST" action="/shopping/removeFromAllCart/">
+      {% csrf_token %}
+      <button type="submit">カートを空にする</button>
+    </form>
     {% if total_price %} 合計 {{ total_price }} 円<br />
     <form action="/shopping/purchase/" method="POST">
       {% csrf_token %}

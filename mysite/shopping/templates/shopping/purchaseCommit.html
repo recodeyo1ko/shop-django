@@ -1,13 +1,18 @@
 {% load static %}
-<html>
-	<head>
-		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-		<title>商品の購入完了</title>
-		<link rel='stylesheet' type='text/css' href='{% static "shopping/css/style.css" %}' />
-	</head>
-	<body>
-
-		<!-- 任意機能 -->
-
-	</body>
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>購入完了</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'shopping/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h1>購入完了</h1>
+    <p>{{ message }}</p>
+    <a href="/shopping/cart/">カートに戻る</a>
+  </body>
 </html>
