@@ -1,0 +1,68 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ショッピングカート</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "shopping/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h3>ショッピングカート内の商品一覧</h3>
+    <br />
+    <table>
+      <tr>
+        <th>商品名</th>
+        <th>商品の色</th>
+        <th>メーカー名</th>
+        <th>単価</th>
+        <th>数量</th>
+      </tr>
+      {%for line in form%}
+      <tr>
+        <td>{{line.name}}</td>
+        <td>{{line.color}}</td>
+        <td>{{line.manufacturer}}</td>
+        <td>{{line.price}}円</td>
+
+        <td>
+          <form
+            action="/shopping/updateItemInCart/{{line.item_id}}/"
+            method="POST"
+          >
+            {% csrf_token %}
+            <select name="amount" id="amount">
+              <option disabled selected value="{{ line.amount }}">
+                {{line.amount}}
+              </option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+            </select>
+            個
+            <br />
+            <input type="submit" value="更新" />
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% if total_price %} 合計 {{ total_price }} 円<br />
+    <form action="/shopping/purchase/" method="POST">
+      {% csrf_token %}
+
+      <input type="submit" value="購入する (任意機能)" />
+    </form>
+    <br />
+    {% endif %} {% if message %} {{ message }}<br />
+    {% endif %} <a href="/">商品検索</a>へ<br />
+  </body>
+</html>
