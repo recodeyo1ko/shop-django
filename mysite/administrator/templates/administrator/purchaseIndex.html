@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>購入一覧</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'shopping/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h1>購入一覧</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>注文ID</th>
+          <th>ユーザーID</th>
+          <th>注文日時</th>
+          <th>注文詳細</th>
+          <th>合計金額</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+        <tr>
+          <td>{{ purchase.id }}</td>
+          <td>{{ purchase.user_id }}</td>
+          <td>{{ purchase.purchase_date }}</td>
+          <td>
+            <table class="nested-table">
+              <thead>
+                <tr>
+                  <th>商品名</th>
+                  <th>価格</th>
+                  <th>数量</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for detail in purchase.purchasedetail_set.all %}
+                <tr>
+                  <td>{{ detail.item.name }}</td>
+                  <td>{{ detail.item.price }}</td>
+                  <td>{{ detail.amount }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </td>
+          <td>{{ purchase.total_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'administrator:top' %}">管理者トップページに戻る</a>
+  </body>
+</html>

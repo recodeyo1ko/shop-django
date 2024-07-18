@@ -1,0 +1,19 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>管理者トップ</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "account/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h2>管理者トップ画面</h2>
+    <ul>
+      <li><a href="{% url 'administrator:itemIndex' %}">商品一覧</a></li>
+      <li><a href="{% url 'administrator:purchaseIndex' %}">注文一覧</a></li>
+      <li><a href="{% url 'administrator:admin_logout' %}">ログアウト</a></li>
+  </body>
+</html>

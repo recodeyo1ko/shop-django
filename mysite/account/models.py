@@ -12,7 +12,7 @@ class User(models.Model):
   def __str__(self): 
     return self.user_id #表示内容
 
-class Meta:
-  ordering = ["-user_id"] #並び順
-  verbose_name = "ユーザ"
-  verbose_name_plural = "ユーザ"
+  class Meta:
+    ordering = ["-user_id"] #並び順
+    verbose_name = "ユーザ"
+    verbose_name_plural = "ユーザ"

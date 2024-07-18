@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>管理者ログイン</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "account/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h2>管理者ログイン</h2>
+    <form method="POST" action="{% url 'administrator:admin_login' %}">
+      {% csrf_token %} {{ login_form.as_p }}
+      <button type="submit">ログイン</button>
+    </form>
+    {% if message %}
+    <p style="color: red">{{ message }}</p>
+    {% endif %}
+  </body>
+</html>

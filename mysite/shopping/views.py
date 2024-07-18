@@ -70,6 +70,7 @@ def add_to_cart(request):
         user_id = request.session['user_id']
         item_id = int(request.POST.get('itemId'))
         amount = int(request.POST.get('amount'))
+        item = models.Item.objects.get(item_id=item_id)
         user = User.objects.get(user_id=user_id) #from account.models import Userにより別アプリのモデルが使える
         if models.ItemsInCart.objects.filter(user_id=user_id, item_id=item_id).exists():
             items_in_cart = models.ItemsInCart.objects.get(item_id=item_id, user_id=user_id)
@@ -184,6 +185,27 @@ def purchase(request):
     
     user_id = request.session['user_id']
     cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
+    for item in cart_items:
+        if item.amount > item.item.stock:
+            user_id = request.session['user_id'] 
+            cart_item = models.ItemsInCart.objects.filter(user_id=user_id) 
+            if cart_item:
+                form =[]
+                total_price = 0
+                for i in cart_item:
+                    cart = {
+                        'item_id':i.item.item_id,
+                        'name':i.item.name,
+                        'color':i.item.color,
+                        'price':i.item.price,
+                        'manufacturer':i.item.manufacturer,
+                        'amount':i.amount,
+                        'stock':i.item.stock
+                        }
+                    total_price = total_price + i.item.price*i.amount
+                    form.append(cart)
+            message = '在庫が足りません。'
+            return render(request, 'shopping/cart.html', {'message': message, 'form': form})
     if not cart_items.exists():
         message = 'カートが空です。'
         return redirect('/shopping/cart/')

@@ -36,6 +36,8 @@
       </tr>
       {% endfor %}
     </table>
+    {% if message %} {{ message }}<br />
+    {% endif %}
     <form action="/shopping/addToCart/" method="POST">
       {% csrf_token %} 数量 {% for line in form %} {% if line.stock >= 1 %}
       <select name="amount">

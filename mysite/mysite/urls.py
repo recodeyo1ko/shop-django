@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.index),
     path('account/',include('account.urls')),
     path('shopping/',include('shopping.urls')),
+    path('administrator/', include('administrator.urls')),
 
     #管理者機能
     # path('administrator/',include('administrator.urls', namespace='administrator')),

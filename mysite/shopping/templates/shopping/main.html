@@ -29,6 +29,8 @@
       <a href="/account/updateUser/">会員情報の変更</a><br />
       <a href="/account/logout/">ログアウト</a><br />
     </div>
+    {% if message %} {{ message }}<br />
+    {% endif %}
     <a href="/administrator/">管理者ページ (任意機能)</a><br />
   </body>
   <script>
