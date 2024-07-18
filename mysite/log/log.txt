@@ -78,3 +78,4 @@ INFO login views 2024-07-18 11:16:50,503 url:/account/login/ method:POST user:1 
 INFO admin_login views 2024-07-18 11:25:17,288 url:/administrator/login/ method:POST admin:1 login
 INFO admin_login views 2024-07-18 11:25:38,192 url:/administrator/login/ method:POST admin:1 login
 INFO login views 2024-07-18 11:41:00,607 url:/account/login/ method:POST user:1 login
+INFO admin_login views 2024-07-18 13:42:44,199 url:/administrator/login/ method:POST admin:1 login

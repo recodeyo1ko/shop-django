@@ -12,26 +12,9 @@
   <body>
     <h3>管理者メインページ</h3>
     <h4>商品の検索</h4>
-    <form action="#" method="GET">
-      <table>
-        <tr>
-          <th>キーワード</th>
-          <td><input type="text" class="text" name="keyword" /></td>
-        </tr>
-        <tr>
-          <th>カテゴリ</th>
-          <td>
-            <select name="category">
-              <option selected value="all">すべて</option>
-              <option value="hat">帽子</option>
-              <option value="bag">鞄</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2"><input type="submit" value="検索" /></td>
-        </tr>
-      </table>
+    <form action="{% url 'administrator:item_search' %}" method="GET">
+      {% csrf_token %} {{ search_form }}
+      <input type="submit" value="検索" /><br />
     </form>
     <br />
     <h4>購入履歴の検索</h4>

@@ -1,52 +1,57 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>商品の登録</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>商品の登録</h3>
     <br />
-    <form action="registerItemConfirm.html" method="POST">
+    <form
+      method="POST"
+      action="{% url 'administrator:register_item_confirm' %}"
+    >
+      {% csrf_token %}
       <table>
         <tr>
           <th>商品名</th>
-          <td><input type="text" class="text" name="name" /></td>
+          <td>{{ item_form.name }}</td>
         </tr>
         <tr>
           <th>商品の色</th>
-          <td><input type="text" class="text" name="color" /></td>
+          <td>{{ item_form.color }}</td>
         </tr>
         <tr>
           <th>メーカー名</th>
-          <td><input type="text" class="text" name="manufacturer" /></td>
+          <td>{{ item_form.manufacturer }}</td>
         </tr>
         <tr>
           <th>カテゴリ</th>
-          <td>
-            <select name="category">
-              <option selected value="2">帽子</option>
-              <option value="3">鞄</option>
-            </select>
-          </td>
+          <td>{{ item_form.category }}</td>
         </tr>
         <tr>
           <th>オススメ</th>
-          <td><input type="checkbox" name="recommend" />オススメする</td>
+          <td>{{ item_form.recommended }} オススメする</td>
         </tr>
         <tr>
           <th>価格</th>
-          <td><input type="text" class="id" name="price" />円</td>
+          <td>{{ item_form.price }} 円</td>
         </tr>
         <tr>
           <th>在庫数</th>
-          <td><input type="text" class="id" name="stock" />個</td>
+          <td>{{ item_form.stock }} 個</td>
         </tr>
         <tr>
           <td colspan="2"><input type="submit" value="登録確認" /></td>
         </tr>
       </table>
     </form>
-    <a href="main.html">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
   </body>
 </html>

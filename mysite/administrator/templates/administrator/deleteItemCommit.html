@@ -10,34 +10,34 @@
     <table>
       <tr>
         <th>商品名</th>
-        <td>麦わら帽子</td>
+        <td>{{ item.name }}</td>
       </tr>
       <tr>
         <th>商品の色</th>
-        <td>黄色</td>
+        <td>{{ item.color }}</td>
       </tr>
       <tr>
         <th>メーカー名</th>
-        <td>日本帽子製造</td>
+        <td>{{ item.manufacturer }}</td>
       </tr>
       <tr>
         <th>カテゴリ</th>
-        <td>帽子</td>
+        <td>{{ item.category.name }}</td>
       </tr>
       <tr>
         <th>オススメ</th>
-        <td>オススメしない</td>
+        <td>{{ item.recommended }}</td>
       </tr>
       <tr>
         <th>価格</th>
-        <td>4980 円</td>
+        <td>{{ item.price }} 円</td>
       </tr>
       <tr>
         <th>在庫数</th>
-        <td>12 個</td>
+        <td>{{ item.stock }} 個</td>
       </tr>
     </table>
     <br />
-    <a href="#">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
   </body>
 </html>

@@ -45,6 +45,7 @@ def search(request):
                 message = '見つかりませんでした'
                 return render(request, 'shopping/searchResult.html', {'message':message,'keyword':keyword,'category_name':category_name})
         return redirect('shopping:index')
+    
 def item_detail(request,item_id):
     try:
         found_item = models.Item.objects.get(item_id=item_id) #getフィルタの結果条件に一致するオブジェクトが一つだけ

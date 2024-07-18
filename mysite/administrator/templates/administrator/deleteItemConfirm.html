@@ -7,35 +7,42 @@
   <body>
     <h3>以下の商品を削除しますか？</h3>
     <br />
-    <form action="deleteItemCommit.html" method="POST">
+    <form
+      action="{% url 'administrator:delete_item_commit' item.item_id %}"
+      method="POST"
+    >
+      {% csrf_token %}
       <table>
         <tr>
           <th>商品名</th>
-          <td>麦わら帽子</td>
+          <td>{{ item.name }}</td>
         </tr>
         <tr>
           <th>商品の色</th>
-          <td>黄色</td>
+          <td>{{ item.color }}</td>
         </tr>
         <tr>
           <th>メーカー名</th>
-          <td>日本帽子製造</td>
+          <td>{{ item.manufacturer }}</td>
         </tr>
         <tr>
           <th>カテゴリ</th>
-          <td>帽子</td>
+          <td>{{ item.category.name }}</td>
         </tr>
         <tr>
           <th>オススメ</th>
-          <td>オススメしない</td>
+          <td>
+            {% if item.recommended %}オススメする{% else %}
+            <br />おススメしない {% endif %}
+          </td>
         </tr>
         <tr>
           <th>価格</th>
-          <td>4980 円</td>
+          <td>{{ item.price }} 円</td>
         </tr>
         <tr>
           <th>在庫数</th>
-          <td>12 個</td>
+          <td>{{ item.stock }} 個</td>
         </tr>
         <tr>
           <td colspan="2"><input type="submit" value="削除" /></td>
