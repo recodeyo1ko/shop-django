@@ -108,13 +108,10 @@ def item_search(request):
 
 @is_admin_login
 def register_item(request):
-    if request.method == 'POST':
-        item_form = forms.ItemForm(request.POST)
-        if item_form.is_valid():
-            item_form.save()
-            return redirect('administrator:top')
-    else:
+    if request.method == 'GET':
         item_form = forms.ItemForm()
+    else:
+        return redirect('administrator:top')
     return render(request, 'administrator/registerItem.html', {'item_form': item_form})
 
 @is_admin_login
@@ -159,39 +156,53 @@ def register_item_commit(request):
 
 @is_admin_login
 def update_item(request, item_id):
-    item = Item.objects.get(item_id=item_id)
-    if request.method == 'POST':
-        item_form = forms.ItemForm(request.POST, instance=item)
-        if item_form.is_valid():
-            item_form.save()
-            return redirect('administrator:top')
+    if request.method == 'GET':
+        item = Item.objects.get(item_id=item_id)
+        form = forms.ItemForm(instance=item)
     else:
-        item_form = forms.ItemForm(instance=item)
-    return render(request, 'administrator/updateItem.html', {'item_form': item_form})
+        return redirect('administrator:top')
+    return render(request, 'administrator/updateItem.html', {'form': form, 'item': item})
 
 @is_admin_login
 def update_item_confirm(request, item_id):
-    item = Item.objects.get(item_id=item_id)
     if request.method == 'POST':
-        item_form = forms.ItemForm(request.POST, instance=item)
+        item_form = forms.ItemForm(request.POST)
         if item_form.is_valid():
-            item = item_form.save(commit=False)
+            item_data = item_form.cleaned_data
+            item = {
+                'item_id': item_id,
+                'name': item_data['name'],
+                'category_id': item_data['category'].category_id,
+                'category_name': item_data['category'].name,
+                'color': item_data['color'],
+                'price': item_data['price'],
+                'manufacturer': item_data['manufacturer'],
+                'recommended': item_data['recommended'],
+                'stock': item_data['stock'],
+            }
             return render(request, 'administrator/updateItemConfirm.html', {'item': item})
     else:
+        item = get_object_or_404(Item, item_id=item_id)
         item_form = forms.ItemForm(instance=item)
-    return render(request, 'administrator/updateItem.html', {'item_form': item_form})
+    return render(request, 'administrator/updateItem.html', {'item_form': item_form, 'item': item})
+
+
 
 @is_admin_login
 def update_item_commit(request, item_id):
-    item = Item.objects.get(item_id=item_id)
+    item = get_object_or_404(Item, item_id=item_id)
     if request.method == 'POST':
         item_form = forms.ItemForm(request.POST, instance=item)
         if item_form.is_valid():
-            item_form.save()
-            return redirect('administrator:top')
+            item = item_form.save()
+            return render(request, 'administrator/updateItemCommit.html', {'item': item})
+        else:
+            return render(request, 'administrator/updateItem.html', {'item_form': item_form, 'item': item})
     else:
-        item_form = forms.ItemForm(instance=item)
-    return render(request, 'administrator/updateItem.html', {'item_form': item_form})
+        return redirect('administrator:update_item', item_id=item_id)
+
+
+
 
 
 @is_admin_login

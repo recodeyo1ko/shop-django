@@ -1,62 +1,59 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <title>商品の登録情報変更</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>商品の登録情報変更</h3>
     <br />
-    <form action="updateItemConfirm.html" method="POST">
-      <input type="hidden" name="itemId" value="1234" />
+    <form
+      action="{% url 'administrator:update_item_confirm' item.item_id %}"
+      method="POST"
+    >
+      {% csrf_token %}
       <table>
         <tr>
           <th>商品名</th>
-          <td>
-            <input type="text" class="text" name="name" value="麦わら帽子" />
-          </td>
+          <td>{{ form.name }}</td>
         </tr>
         <tr>
           <th>商品の色</th>
-          <td><input type="text" class="text" name="color" value="黄色" /></td>
+          <td>{{ form.color }}</td>
         </tr>
         <tr>
           <th>メーカー名</th>
-          <td>
-            <input
-              type="text"
-              class="text"
-              name="manufacturer"
-              value="日本帽子製造"
-            />
-          </td>
+          <td>{{ form.manufacturer }}</td>
         </tr>
         <tr>
           <th>カテゴリ</th>
-          <td>
-            <select name="category">
-              <option selected value="hat">帽子</option>
-              <option value="bag">鞄</option>
-            </select>
-          </td>
+          <td>{{ form.category }}</td>
         </tr>
         <tr>
           <th>オススメ</th>
-          <td><input type="checkbox" name="recommend" />オススメする</td>
+          <td>{{ form.recommended }}</td>
         </tr>
         <tr>
           <th>価格</th>
-          <td><input type="text" class="id" name="price" value="4980" />円</td>
+          <td>{{ form.price }}円</td>
         </tr>
         <tr>
           <th>在庫数</th>
-          <td><input type="text" class="id" name="stock" value="12" />個</td>
+          <td>{{ form.stock }}個</td>
         </tr>
         <tr>
-          <td colspan="2"><input type="submit" value="変更確認" /></td>
+          <td colspan="2">
+            <input type="submit" value="変更確認" />
+          </td>
         </tr>
       </table>
     </form>
-    <a href="main.html">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a><br />
   </body>
 </html>
