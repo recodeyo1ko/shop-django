@@ -11,37 +11,16 @@
     />
   </head>
   <body>
-    <h1>ショッピングカート内の商品を削除</h1>
-    <p>商品名: {{ item.item.name }}</p>
-    <p>注文予定個数: {{ item.amount }}</p>
-    <p>本当にこの商品を削除しますか？</p>
+    <h3>以下の商品をショッピングカートから削除してよろしいですか？</h3>
+    商品名: {{ item.item.name }} <br />
+    メーカー名: {{ item.item.manufacturer }}<br />
+    単価: {{ item.item.price }}円<br />
+    数量: {{ item.amount }}個<br />
     <form method="POST" action="/shopping/removeFromCartCommit/">
       {% csrf_token %}
       <input type="hidden" name="item_id" value="{{ item.item.item_id }}" />
-      <button type="submit">はい、削除します</button>
+      <button type="submit">削除する</button>
     </form>
-    <br />
-    <a href="/shopping/cart/">いいえ、キャンセルします</a>
-    <br />
-    <a href="/">商品検索</a>へ<br />
-  </body>
-
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ショッピングカート内の商品を削除</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-  </head>
-  <body>
-    <h3>以下の商品をショッピングカートから削除してよろしいですか？</h3>
-    <br />
-    麦わら帽子<br />
-    日本帽子製造<br />
-    4980円<br />
-    数量 2 個<br />
-    <form action="removeFromCartCommit.html" method="POST">
-      <input type="hidden" name="itemId" value="123" />
-      <input type="submit" value="削除する" /><br />
-    </form>
-    <a href="main.html">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

@@ -146,11 +146,16 @@ def remove_from_cart_commit(request):
         item_id = int(request.POST.get('item_id'))
         try:
             item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
+            context = {
+                'item_name': item_in_cart.item.name,
+                'item_price': item_in_cart.item.price,
+                'item_manufacturer': item_in_cart.item.manufacturer,
+                'item_amount': item_in_cart.amount
+            }
             item_in_cart.delete()
-            message = '商品がカートから削除されました'
         except models.ItemsInCart.DoesNotExist:
-            message = '商品がカートに存在しませんでした'
-        return render(request, 'shopping/removeFromCartCommit.html', {'message': message})
+            pass
+        return render(request, 'shopping/removeFromCartCommit.html', context)
     
     return redirect('shopping:cart')
 

@@ -11,23 +11,12 @@
     />
   </head>
   <body>
-    <h1>ショッピングカート内の商品を削除</h1>
-    <p>{{ message }}</p>
-    <a href="/shopping/cart/">カートに戻る</a>
-    <a href="/">商品検索</a>へ<br />
-  </body>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ショッピングカート内の商品を削除</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-  </head>
-  <body>
     <h3>以下の商品をショッピングカートから削除しました。</h3>
     <br />
-    麦わら帽子<br />
-    日本帽子製造<br />
-    4980円<br />
-    数量 2 個<br /><br />
-    <a href="main.html">商品検索</a>へ<br />
+    商品名: {{ item_name }} <br />
+    メーカー名: {{ item_manufacturer }}<br />
+    単価: {{ item_price }}円<br />
+    数量: {{ item_amount }}個<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>
