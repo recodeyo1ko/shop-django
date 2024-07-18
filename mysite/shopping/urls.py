@@ -27,6 +27,7 @@ urlpatterns = [
     path('purchaseConfirm/',views.purchase_confirm, name='purchase_confirm'),
     path('purchaseCommit/',views.purchase_commit, name='purchase_commit'),
     path('purchaseHistory/',views.purchase_history, name='purchase_history'),
+    path('purchaseCancelConfirm/<int:purchase_id>/',views.purchase_cancel_confirm, name='purchase_cancel_confirm'),
     path('purchaseCancel/<int:purchase_id>/',views.purchase_cancel_commit, name='purchase_cancel_commit'),
 
 ]

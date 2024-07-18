@@ -5,6 +5,8 @@ from . import models
 from . import forms
 from django.utils import timezone
 from .utils import is_login
+from django.shortcuts import get_object_or_404
+from .models import Purchase, PurchaseDetail
 
 # Create your views here.
 
@@ -284,9 +286,44 @@ def purchase_history(request):
     purchase_details = models.PurchaseDetail.objects.filter(purchase__in=purchases)
     
     return render(request, 'shopping/purchaseHistory.html', {'purchases': purchases, 'purchase_details': purchase_details})
-                
-def purchase_cancel(request,purchase_id):
-    pass # 任意機能 
 
-def purchase_cancel_commit(request):
-    pass # 任意機能
+@is_login
+def purchase_cancel_confirm(request,purchase_id):
+    purchase = get_object_or_404(Purchase, id=purchase_id, user_id=request.session['user_id'])
+    purchase_details = PurchaseDetail.objects.filter(purchase=purchase)
+
+    if request.method == 'POST':
+        return redirect('shopping:purchase_cancel', purchase_id=purchase.id)
+
+    return render(request, 'shopping/purchaseCancelConfirm.html', {
+        'purchase': purchase,
+        'purchase_details': purchase_details
+    })
+    
+
+@is_login
+def purchase_cancel_commit(request, purchase_id):
+    user_id = request.session['user_id']
+    purchase = get_object_or_404(Purchase, id=purchase_id, user_id=user_id)
+    purchase_details = PurchaseDetail.objects.filter(purchase=purchase)
+
+
+    if request.method == 'POST':
+        cancelled_items = []
+        for detail in purchase_details:
+            detail.item.stock += detail.amount
+            detail.item.save()
+            cancelled_items.append({
+                'name': detail.item.name,
+                'color': detail.item.color,
+                'manufacturer': detail.item.manufacturer,
+                'price': detail.item.price,
+                'amount': detail.amount
+            })
+        purchase.delete()
+        return render(request, 'shopping/purchaseCancelCommit.html', {
+            'purchase': purchase,
+            'cancelled_items': cancelled_items
+        })
+
+    return redirect('shopping:purchase_history')
