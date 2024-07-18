@@ -7,6 +7,8 @@ from django.utils import timezone
 from .utils import is_login
 from django.shortcuts import get_object_or_404
 from .models import Purchase, PurchaseDetail
+from django.core.exceptions import MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -138,6 +140,14 @@ def remove_from_cart(request, item_id):
     except models.ItemsInCart.DoesNotExist:
         message = '商品がカートに存在しません'
         return redirect('shopping:cart')
+    except MultipleObjectsReturned:
+        items_in_cart = models.ItemsInCart.objects.filter(user_id=user_id, item_id=item_id)
+        if items_in_cart.exists():
+            for item in items_in_cart[1:]:  # Keep the first item, delete the rest
+                item.delete()
+        item_in_cart = items_in_cart.first()
+        message = '商品が複数カートに存在したため、同一商品を削除しました'
+        return render(request, 'shopping/removeFromCartConfirm.html', {'item': item_in_cart, 'message': message})
     
     return render(request, 'shopping/removeFromCartConfirm.html', {'item': item_in_cart})
 
