@@ -37,10 +37,11 @@
     {% if message %} {{ message }}<br />
     {% endif %}
 
-    <a href="/administrator/itemEdit/{{item.item_id}}"> この商品を編集する </a>
+    <a href="{% url 'administrator:item_edit' item.item_id %}"
+      >この商品を編集する</a
+    ><br />
 
-    <a href="/administrator/">管理者トップへ</a><br />
-    <a href="/">商品検索</a>へ
-    <br />
+    <a href="{% url 'administrator:top' %}">管理者トップへ</a><br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ
   </body>
 </html>

@@ -30,8 +30,8 @@
       {%for item in items%}
       <tr>
         <td>
-          <a href="/administrator/itemDetail/{{item.item_id}}">
-            {{item.name}}
+          <a href="{% url 'administrator:item_detail' item.item_id %}">
+            {{ item.name }}
           </a>
           <sup>{{item.recommended}}</sup>
         </td>
@@ -45,8 +45,8 @@
     <div>{{ message }}</div>
     {% endif %}
     <br />
-    <a href="/administrator/">管理者トップへ</a><br />
-    <a href="/">商品検索</a>へ
+    <a href="{% url 'administrator:top' %}"> 管理者トップへ</a><br />
+    <a href="{% url 'shopping:index' %}"> 商品検索</a>へ
     <br />
   </body>
 

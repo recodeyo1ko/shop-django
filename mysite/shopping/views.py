@@ -4,6 +4,7 @@ from account.models import User
 from . import models
 from . import forms
 from django.utils import timezone
+from .utils import is_login
 
 # Create your views here.
 
@@ -41,7 +42,7 @@ def search(request):
             else:
                 message = '見つかりませんでした'
                 return render(request, 'shopping/searchResult.html', {'message':message,'keyword':keyword,'category_name':category_name})
-        return redirect('/shopping/') 
+        return redirect('shopping:index')
 def item_detail(request,item_id):
     try:
         found_item = models.Item.objects.get(item_id=item_id) #getフィルタの結果条件に一致するオブジェクトが一つだけ
@@ -58,14 +59,12 @@ def item_detail(request,item_id):
             form.append(item_detail)
             return render(request, 'shopping/itemDetail.html',{'form':form})
     except:
-        return redirect('/shopping/')
+        return redirect('shopping:index')
     
-    return redirect('/shopping/') 
+    return redirect('shopping:index')
                 
-                
+@is_login
 def add_to_cart(request):
-    if not request.session.get('is_login', None): #ログイン状態確認
-        return redirect("/account/login/")
     if request.method == 'POST': #POST通信
         user_id = request.session['user_id']
         item_id = int(request.POST.get('itemId'))
@@ -84,12 +83,11 @@ def add_to_cart(request):
             new_cart.item = item
             new_cart.amount = amount
             new_cart.save() #DB書き込み
-        return redirect('/shopping/cart/')
-    return redirect('/shopping/') 
+        return redirect('shopping:cart')
+    return redirect('shopping:index')
                 
+@is_login
 def cart(request): 
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/") 
     user_id = request.session['user_id'] 
     cart_item = models.ItemsInCart.objects.filter(user_id=user_id) 
     if cart_item:
@@ -112,9 +110,8 @@ def cart(request):
         return render(request, 'shopping/cart.html', {'message':message}) 
     return render(request, 'shopping/cart.html', locals()) 
 
+@is_login
 def amount_in_cart(request): 
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/") 
     
     if request.method == 'POST':  # POST通信 
         user_id = request.session['user_id'] 
@@ -127,24 +124,22 @@ def amount_in_cart(request):
         except models.ItemsInCart.DoesNotExist:
             pass  # アイテムが存在しない場合は何もしない
     
-    return redirect('/shopping/cart/')
+    return redirect('shopping:cart')
                 
+@is_login
 def remove_from_cart(request, item_id):
     print(  "remove_from_cart")
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     user_id = request.session['user_id']
     try:
         item_in_cart = models.ItemsInCart.objects.get(user_id=user_id, item_id=item_id)
     except models.ItemsInCart.DoesNotExist:
         message = '商品がカートに存在しません'
-        return redirect('/shopping/cart/')
+        return redirect('shopping:cart')
     
     return render(request, 'shopping/removeFromCartConfirm.html', {'item': item_in_cart})
 
+@is_login
 def remove_from_cart_commit(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     
     if request.method == 'POST':
         user_id = request.session['user_id']
@@ -157,32 +152,25 @@ def remove_from_cart_commit(request):
             message = '商品がカートに存在しませんでした'
         return render(request, 'shopping/removeFromCartCommit.html', {'message': message})
     
-    return redirect('/shopping/cart/')
+    return redirect('shopping:cart')
 
 
-def remove_from_all_cart(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
-    
+@is_login
+def remove_from_all_cart(request):    
     return render(request, 'shopping/removeFromAllCartConfirm.html')
 
+@is_login
 def remove_from_all_cart_commit(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
-    
     if request.method == 'POST':
         user_id = request.session['user_id']
         models.ItemsInCart.objects.filter(user_id=user_id).delete()
         message = 'すべての商品がカートから削除されました'
         return render(request, 'shopping/removeFromAllCartCommit.html', {'message': message})
     
-    return redirect('/shopping/cart/')
+    return redirect('shopping:cart')
 
-    
+@is_login
 def purchase(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
-    
     user_id = request.session['user_id']
     cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
     for item in cart_items:
@@ -214,16 +202,14 @@ def purchase(request):
     
     return render(request, 'shopping/purchaseConfirm.html', {'cart_items': cart_items, 'total_price': total_price})
 
+@is_login
 def purchase_commit(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
-    
     if request.method == 'POST':
         user_id = request.session['user_id']
         cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
         if not cart_items.exists():
             message = 'カートが空です。'
-            return redirect('/shopping/cart/')
+            return redirect('shopping:cart')
         purchase = models.Purchase(user_id=user_id)
         purchase.total_price = sum(item.item.price * item.amount for item in cart_items)
         purchase.save()
@@ -243,12 +229,10 @@ def purchase_commit(request):
         message = '購入が完了しました。'
         return render(request, 'shopping/purchaseCommit.html', {'message': message})
     
-    return redirect('/shopping/cart/')
+    return redirect('shopping:cart')
 
+@is_login
 def purchase_history(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
-    
     user_id = request.session['user_id']
     purchases = models.Purchase.objects.filter(user_id=user_id).order_by('-purchase_date')
     purchase_details = models.PurchaseDetail.objects.filter(purchase__in=purchases)

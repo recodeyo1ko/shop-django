@@ -3,16 +3,17 @@ from django.shortcuts import redirect
 from . import models
 from . import forms
 import logging 
+from .utils import is_login
 # Create your views here.
 
 logger = logging.getLogger('login') # loggerを指定
 
 def index(request): 
-    return redirect('/') 
+    return redirect('shopping:index')
 
 def login(request): 
     if request.session.get('is_login', None): 
-        return redirect('/') 
+        return redirect('shopping:index')
     if request.method == 'POST':
         login_form = forms.UserForm(request.POST) #ログインForm生成 
         message = '入力した内容を再度確認してください' 
@@ -29,7 +30,7 @@ def login(request):
                 request.session['user_id'] = user.user_id 
                 request.session['user_name'] = user.name 
                 logger.info('url:%s method:%s user:%s login'% (request.path, request.method, user.user_id)) #log 
-                return redirect('/') 
+                return redirect('shopping:index')
             else: 
                 message = 'パスワードが正しくありません。'
                 return render(request, 'account/login.html', locals())
@@ -38,15 +39,14 @@ def login(request):
     login_form = forms.UserForm()
     return render(request, 'account/login.html', locals())
 
+@is_login
 def logout(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     request.session.flush() #session削除 
-    return redirect("/account/login/")
+    return redirect('account:login')
 
 def register_user(request):
     if request.session.get('is_login', None): #ログインしていない状態確認
-        return redirect('/') 
+        return redirect('shopping:index')
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
         message = "入力した内容を再度確認してください"
@@ -72,7 +72,7 @@ def register_user(request):
     
 def register_user_commit(request):
     if request.session.get('is_login', None):
-        return redirect('/') 
+        return redirect('shopping:index')
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
         if register_form.is_valid():
@@ -97,9 +97,8 @@ def register_user_commit(request):
     register_form = forms.RegisterForm()
     return render(request, 'account/registerUser.html', locals())
 
+@is_login
 def user_info(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     user_id = request.session['user_id']
     user = models.User.objects.get(user_id=user_id)
     id = user_id
@@ -108,9 +107,8 @@ def user_info(request):
     register_form = forms.RegisterForm()
     return render(request, 'account/userInfo.html', locals())
 
+@is_login
 def update_user(request): 
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/") 
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST)
         message = "入力した内容を再度確認してください" 
@@ -136,9 +134,8 @@ def update_user(request):
     register_form = forms.RegisterForm() 
     return render(request, 'account/updateUser.html', locals()) 
             
+@is_login
 def update_user_commit(request): 
-    if not request.session.get('is_login', None): 
-        return redirect("/account/login/")
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
         if register_form.is_valid():
@@ -158,14 +155,12 @@ def update_user_commit(request):
             return render(request, 'account/updateUser.html', locals()) 
     return render(request, 'account/main.html') 
             
+@is_login
 def withdraw(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     return render(request, 'account/withdrawConfirm.html')
     
+@is_login
 def withdraw_commit(request):
-    if not request.session.get('is_login', None):
-        return redirect("/account/login/")
     user_id = request.session['user_id']
     name = request.session['user_name']
     user = models.User.objects.get(user_id=user_id)

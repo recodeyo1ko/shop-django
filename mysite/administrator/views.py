@@ -13,7 +13,7 @@ def top(request):
     if "is_login" in request.session:
         message = "管理者としてログインする場合は、事前に一般ユーザからログアウトしてください"
         return render(request, "shopping/main.html", {"message": message})
-    return render(request, "administrator/top.html")
+    return render(request, "administrator/main.html")
 
 def admin_login(request):
     if request.method == 'POST':
@@ -46,41 +46,41 @@ def admin_logout(request):
   return redirect("administrator:admin_login")
 
 @is_admin_login
-def itemIndex(request):
+def item_index(request):
     items = Item.objects.all()
     return render(request, "administrator/itemIndex.html", {"items": items})
 
 @is_admin_login
-def itemCreate(request):
+def item_create(request):
    pass
 
 @is_admin_login
-def ItemCreateCommit(request):
+def item_create_commit(request):
     pass
   
 @is_admin_login
-def ItemDetail(request, item_id):
+def item_detail(request, item_id):
     item = Item.objects.get(item_id=item_id)
     return render(request, "administrator/itemDetail.html", {"item": item})
 
 @is_admin_login
-def itemEdit(request, item_id):
+def item_edit(request, item_id):
     item = Item.objects.get(item_id=item_id)
     if request.method == "POST":
         item_form = forms.ItemForm(request.POST, instance=item)
         if item_form.is_valid():
             item_form.save()
-            return redirect("administrator:itemIndex")
+            return redirect("administrator:item_index")
     else:
         item_form = forms.ItemForm(instance=item)
     return render(request, "administrator/itemEdit.html", {"item_form": item_form})
 
 @is_admin_login
-def itemDelete(request, item_id):
+def item_delete(request, item_id):
    pass
 
 @is_admin_login
-def purchaseIndex(request):
+def purchase_index(request):
   if "admin_id" in request.session:
     purchases = Purchase.objects.all()
     return render(request, "administrator/purchaseIndex.html", {"purchases": purchases})

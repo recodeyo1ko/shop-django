@@ -14,7 +14,7 @@
     <h3>商品の編集</h3>
     <form
       method="POST"
-      action="{% url 'administrator:itemEdit' item_form.instance.item_id %}"
+      action="{% url 'administrator:item_edit' item_form.instance.item_id %}"
     >
       {% csrf_token %}
       <table>
@@ -49,6 +49,6 @@
       </table>
       <button type="submit">保存</button>
     </form>
-    <a href="{% url 'administrator:itemIndex' %}">戻る</a>
+    <a href="{% url 'administrator:item_index' %}">戻る</a>
   </body>
 </html>

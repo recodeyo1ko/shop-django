@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>会員IDの検索結果</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <h3>会員IDの検索結果</h3>
+    <br />
+    <table>
+      <tr>
+        <th>会員ID</th>
+        <th>名前</th>
+        <th>住所</th>
+        <th></th>
+      </tr>
+      <tr>
+        <td>someone@example.com</td>
+        <td>テスト太郎</td>
+        <td>東京都千代田区１－１－１</td>
+        <td>
+          <a href="updateUser.html?userId=someone@example.com">変更</a>
+          <a href="deleteUserConfirm.html?userId=someone@example.com">削除</a>
+        </td>
+      </tr>
+      <tr>
+        <td>otherone@example.net</td>
+        <td>テスト次郎</td>
+        <td>東京都中央区１－１－１</td>
+        <td>
+          <a href="updateUser.html?userId=otherone@example.net">変更</a>
+          <a href="deleteUserConfirm.html?userId=otherone@example.net">削除</a>
+        </td>
+      </tr>
+    </table>
+    <br />
+    前へ 1
+    <a href="userSearch.html?id=example&page=2">2</a>
+    <a href="userSearch.html?id=example&page=3">3</a>
+    <a href="userSearch.html?id=example&page=4">4</a>
+    <a href="userSearch.html?id=example&page=2">次へ</a>
+    <br /><br />
+    <a href="main.html">管理者メインページ</a>へ<br />
+  </body>
+</html>

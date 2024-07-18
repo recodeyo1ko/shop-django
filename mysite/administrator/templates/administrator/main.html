@@ -1,0 +1,104 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>管理者メインページ</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "account/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h3>管理者メインページ</h3>
+    <h4>商品の検索</h4>
+    <form action="#" method="GET">
+      <table>
+        <tr>
+          <th>キーワード</th>
+          <td><input type="text" class="text" name="keyword" /></td>
+        </tr>
+        <tr>
+          <th>カテゴリ</th>
+          <td>
+            <select name="category">
+              <option selected value="all">すべて</option>
+              <option value="hat">帽子</option>
+              <option value="bag">鞄</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="検索" /></td>
+        </tr>
+      </table>
+    </form>
+    <br />
+    <h4>購入履歴の検索</h4>
+    <form action="#" method="GET">
+      <table>
+        <tr>
+          <th>会員ID</th>
+          <td><input type="text" class="id" name="id" /></td>
+        </tr>
+        <tr>
+          <th>注文日</th>
+          <td>
+            <select name="fromYear">
+              <option selected value="0">-</option>
+              <option value="2014">2014</option>
+              <option value="2015">2015</option>
+              <option value="2020">2020</option></select
+            >/
+            <select name="fromMonth">
+              <option selected value="0">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="12">12</option></select
+            >/
+            <select name="fromDay">
+              <option selected value="0">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="31">31</option></select
+            >～
+            <select name="toYear">
+              <option selected value="0">-</option>
+              <option value="2014">2014</option>
+              <option value="2015">2015</option>
+              <option value="2020">2020</option></select
+            >/
+            <select name="toMonth">
+              <option selected value="0">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="12">12</option></select
+            >/
+            <select name="toDay">
+              <option selected value="0">-</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="31">31</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="検索" /></td>
+        </tr>
+      </table>
+    </form>
+    <br />
+    <h4>会員の検索</h4>
+    <form action="#" method="GET">
+      <table>
+        <tr>
+          <th>会員ID</th>
+          <td><input type="text" class="id" name="id" /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="検索" /></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>
