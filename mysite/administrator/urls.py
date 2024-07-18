@@ -10,10 +10,13 @@ urlpatterns = [
   path('itemSearch/', views.item_search, name="item_search"),
   path('userSearch/', views.user_search, name="user_search"),
 
+  # 注文関連
   path('purchaseIndex/', views.purchase_index, name="purchase_index"),
-  path('registerItem/', views.register_item, name="register_item"),
+  path('deletePurchaseConfirm/<int:purchase_id>/', views.delete_purchase_confirm, name="delete_purchase_confirm"),
+  path('deletePurchaseCommit/<int:purchase_id>/', views.delete_purchase_commit, name="delete_purchase_commit"),
 
   # item関連
+  path('registerItem/', views.register_item, name="register_item"),
   path('registerItemCommit/', views.register_item_commit, name="register_item_commit"),
   path('registerItemConfirm/', views.register_item_confirm, name="register_item_confirm"),
   path('updateItem/<int:item_id>/', views.update_item, name="update_item"),
@@ -29,4 +32,5 @@ urlpatterns = [
   path('updateUserConfirm/<int:user_id>/', views.update_user_confirm, name="update_user_confirm"),
   path('deleteUserConfirm/<int:user_id>/', views.delete_user_confirm, name="delete_user_confirm"),
   path('deleteUserCommit/<int:user_id>/', views.delete_user_commit, name="delete_user_commit"),
+
 ]

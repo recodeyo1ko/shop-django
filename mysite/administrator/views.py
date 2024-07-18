@@ -7,6 +7,7 @@ from shopping.forms import SearchForm
 from account.models import User
 from .utils import is_admin_login
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 
 logger = logging.getLogger('login') # loggerを指定
 
@@ -64,12 +65,28 @@ def item_edit(request, item_id):
 
 @is_admin_login
 def purchase_index(request):
-  if "admin_id" in request.session:
     purchases = Purchase.objects.all()
-    return render(request, "administrator/purchaseIndex.html", {"purchases": purchases})
-  else:
-    return redirect("administrator:admin_login")
-  
+    
+    user_id = request.GET.get('id', None)
+    from_year = int(request.GET.get('fromYear', 0))
+    from_month = int(request.GET.get('fromMonth', 0))
+    from_day = int(request.GET.get('fromDay', 0))
+    to_year = int(request.GET.get('toYear', 0))
+    to_month = int(request.GET.get('toMonth', 0))
+    to_day = int(request.GET.get('toDay', 0))
+
+    if user_id:
+        purchases = purchases.filter(user__user_id=user_id)
+    
+    if from_year > 0 and from_month > 0 and from_day > 0:
+        from_date = datetime(from_year, from_month, from_day)
+        purchases = purchases.filter(purchase_date__gte=from_date)
+    
+    if to_year > 0 and to_month > 0 and to_day > 0:
+        to_date = datetime(to_year, to_month, to_day, 23, 59, 59)  # 日付の終わりを含める
+        purchases = purchases.filter(purchase_date__lte=to_date)
+    
+    return render(request, 'administrator/purchaseIndex.html', {'purchases': purchases})
 
 @is_admin_login
 def item_search(request):
@@ -201,10 +218,6 @@ def update_item_commit(request, item_id):
     else:
         return redirect('administrator:update_item', item_id=item_id)
 
-
-
-
-
 @is_admin_login
 def delete_item_confirm(request, item_id):
     item = Item.objects.get(item_id=item_id)
@@ -274,3 +287,27 @@ def delete_user_commit(request, user_id):
     }
     user.delete()
     return render(request, 'administrator/deleteUserCommit.html', {'user': user_data})
+
+@is_admin_login
+def delete_purchase_confirm(request, purchase_id):
+    purchase = Purchase.objects.get(id=purchase_id)
+    purchase_details = PurchaseDetail.objects.filter(purchase_id=purchase_id)
+    return render(request, 'administrator/deletePurchaseConfirm.html', {'purchase': purchase, 'purchase_details': purchase_details})
+
+@is_admin_login
+def delete_purchase_commit(request, purchase_id):
+    purchase = Purchase.objects.get(id=purchase_id)
+    purchase_data = {
+        'purchase_id': purchase.id,
+        'user_id': purchase.user.user_id,
+        'purchase_date': purchase.purchase_date,
+    }
+    purchase_details = PurchaseDetail.objects.filter(purchase_id=purchase_id).values(
+        'item__name', 'item__color', 'item__manufacturer', 'item__price', 'amount'
+    )
+    context = {
+        'purchase': purchase_data,
+        'purchase_details': list(purchase_details)
+    }
+    purchase.delete()
+    return render(request, 'administrator/deletePurchaseCommit.html', context)

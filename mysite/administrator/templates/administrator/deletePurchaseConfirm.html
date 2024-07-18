@@ -1,27 +1,64 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員の削除完了</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="UTF-8" />
+    <title>購入の削除確認</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
-    <h3>以下の会員を削除しました。</h3>
+    <h3>以下の購入を削除しますか？</h3>
     <br />
     <table>
       <tr>
-        <th>会員ID</th>
-        <td>someone@example.com</td>
+        <th>購入者ID</th>
+        <td>{{ purchase.user.user_id }}</td>
       </tr>
       <tr>
-        <th>名前</th>
-        <td>テスト太郎</td>
+        <th>注文日</th>
+        <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
       </tr>
       <tr>
-        <th>住所</th>
-        <td>東京都千代田区１－１－１</td>
+        <th>配送先</th>
+        <td>{{ purchase.address }}</td>
+      </tr>
+      <tr>
+        <th>購入商品</th>
+        <td>
+          <table>
+            <tr>
+              <th>商品名</th>
+              <th>色</th>
+              <th>メーカー</th>
+              <th>単価</th>
+              <th>数量</th>
+            </tr>
+            {% for detail in purchase_details %}
+            <tr>
+              <td>{{ detail.item.name }}</td>
+              <td>{{ detail.item.color }}</td>
+              <td>{{ detail.item.manufacturer }}</td>
+              <td>{{ detail.item.price }}円</td>
+              <td>{{ detail.amount }}個</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
       </tr>
     </table>
     <br />
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
+    <form
+      action="{% url 'administrator:delete_purchase_commit' purchase.id %}"
+      method="POST"
+    >
+      {% csrf_token %}
+      <input type="submit" value="削除" />
+    </form>
+    <br />
+    <a href="{% url 'administrator:top' %}">戻る</a>
   </body>
 </html>

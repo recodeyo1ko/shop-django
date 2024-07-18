@@ -3,56 +3,59 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>購入一覧</title>
+    <title>購入履歴一覧</title>
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
+      href="{% static 'administrator/css/style.css' %}"
     />
   </head>
   <body>
-    <h1>購入一覧</h1>
+    <h3>購入履歴の一覧</h3>
+    <br />
     <table>
-      <thead>
-        <tr>
-          <th>注文ID</th>
-          <th>ユーザーID</th>
-          <th>注文日時</th>
-          <th>注文詳細</th>
-          <th>合計金額</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for purchase in purchases %}
-        <tr>
-          <td>{{ purchase.id }}</td>
-          <td>{{ purchase.user_id }}</td>
-          <td>{{ purchase.purchase_date }}</td>
-          <td>
-            <table class="nested-table">
-              <thead>
-                <tr>
-                  <th>商品名</th>
-                  <th>価格</th>
-                  <th>数量</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for detail in purchase.purchasedetail_set.all %}
-                <tr>
-                  <td>{{ detail.item.name }}</td>
-                  <td>{{ detail.item.price }}</td>
-                  <td>{{ detail.amount }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </td>
-          <td>{{ purchase.total_price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+      <tr>
+        <th>購入者ID</th>
+        <th>注文日</th>
+        <th>購入商品</th>
+        <th>配送先</th>
+        <th></th>
+      </tr>
+      {% for purchase in purchases %}
+      <tr>
+        <td>{{ purchase.user.user_id }}</td>
+        <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
+        <td>
+          <table>
+            <tr>
+              <th>商品名</th>
+              <th>色</th>
+              <th>メーカー</th>
+              <th>単価</th>
+              <th>数量</th>
+            </tr>
+            {% for detail in purchase.purchasedetail_set.all %}
+            <tr>
+              <td>{{ detail.item.name }}</td>
+              <td>{{ detail.item.color }}</td>
+              <td>{{ detail.item.manufacturer }}</td>
+              <td>{{ detail.item.price }}円</td>
+              <td>{{ detail.amount }} 個</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
+        <td>{{ purchase.address }}</td>
+        <td>
+          <a
+            href="{% url 'administrator:delete_purchase_confirm' purchase.id %}"
+            >キャンセル</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
     </table>
-    <a href="{% url 'administrator:top' %}">管理者トップページに戻る</a>
+    <br /><br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
   </body>
 </html>

@@ -1,8 +1,14 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <title>注文のキャンセル完了</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>以下の注文をキャンセルしました。</h3>
@@ -10,11 +16,11 @@
     <table>
       <tr>
         <th>注文者ID</th>
-        <td>someone@example.com</td>
+        <td>{{ purchase.user_id }}</td>
       </tr>
       <tr>
         <th>注文日</th>
-        <td>2014/3/15</td>
+        <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
       </tr>
       <tr>
         <th>購入商品</th>
@@ -27,26 +33,21 @@
               <th>単価</th>
               <th>数量</th>
             </tr>
+            {% for detail in purchase_details %}
             <tr>
-              <td>麦わら帽子</td>
-              <td>黄色</td>
-              <td>日本帽子製造</td>
-              <td>4980円</td>
-              <td>2 個</td>
+              <td>{{ detail.item__name }}</td>
+              <td>{{ detail.item__color }}</td>
+              <td>{{ detail.item__manufacturer }}</td>
+              <td>{{ detail.item__price }}円</td>
+              <td>{{ detail.amount }}個</td>
             </tr>
-            <tr>
-              <td>子ども用麦わら帽子</td>
-              <td>赤</td>
-              <td>東京帽子店</td>
-              <td>2980円</td>
-              <td>3 個</td>
-            </tr>
+            {% endfor %}
           </table>
         </td>
       </tr>
       <tr>
         <th>配送先</th>
-        <td>自宅</td>
+        <td>{{ purchase.address }}</td>
       </tr>
     </table>
     <br />
