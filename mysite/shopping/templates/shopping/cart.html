@@ -45,12 +45,12 @@
       </tr>
       {% endfor %}
     </table>
-    <form method="POST" action="/shopping/removeFromAllCart/">
+    <form action="{% url 'shopping:remove_from_all_cart' %}" method="POST">
       {% csrf_token %}
       <button type="submit">カートを空にする</button>
     </form>
     {% if total_price %} 合計 {{ total_price }} 円<br />
-    <form action="/shopping/purchase/" method="POST">
+    <form action="{% url 'shopping:purchase_confirm' %}" method="POST">
       {% csrf_token %}
 
       <input type="submit" value="購入する (任意機能)" />

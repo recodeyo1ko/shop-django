@@ -44,6 +44,8 @@ class ItemsInCart(models.Model):
 
 class Purchase(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_method = models.IntegerField(default=0)
+    address = models.CharField(max_length=256)
     total_price = models.IntegerField(default=0.0)
     purchase_date = models.DateTimeField(auto_now_add=True)
 

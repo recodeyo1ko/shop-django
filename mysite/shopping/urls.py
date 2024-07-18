@@ -24,7 +24,7 @@ urlpatterns = [
     path('removeFromAllCartCommit/',views.remove_from_all_cart_commit, name='remove_from_all_cart_commit'),
 
     # 購入
-    path('purchase/',views.purchase, name='purchase'),
+    path('purchaseConfirm/',views.purchase_confirm, name='purchase_confirm'),
     path('purchaseCommit/',views.purchase_commit, name='purchase_commit'),
     path('purchaseHistory/',views.purchase_history, name='purchase_history'),
     path('purchaseCancel/<int:purchase_id>/',views.purchase_cancel_commit, name='purchase_cancel_commit'),

@@ -175,37 +175,64 @@ def remove_from_all_cart_commit(request):
     return redirect('shopping:cart')
 
 @is_login
-def purchase(request):
+def purchase_confirm(request):
     user_id = request.session['user_id']
+    user = User.objects.get(user_id=user_id)
     cart_items = models.ItemsInCart.objects.filter(user_id=user_id)
+    
     for item in cart_items:
         if item.amount > item.item.stock:
-            user_id = request.session['user_id'] 
-            cart_item = models.ItemsInCart.objects.filter(user_id=user_id) 
+            user_id = request.session['user_id']
+            cart_item = models.ItemsInCart.objects.filter(user_id=user_id)
             if cart_item:
-                form =[]
+                form = []
                 total_price = 0
                 for i in cart_item:
                     cart = {
-                        'item_id':i.item.item_id,
-                        'name':i.item.name,
-                        'color':i.item.color,
-                        'price':i.item.price,
-                        'manufacturer':i.item.manufacturer,
-                        'amount':i.amount,
-                        'stock':i.item.stock
-                        }
-                    total_price = total_price + i.item.price*i.amount
+                        'item_id': i.item.item_id,
+                        'name': i.item.name,
+                        'color': i.item.color,
+                        'price': i.item.price,
+                        'manufacturer': i.item.manufacturer,
+                        'amount': i.amount,
+                        'stock': i.item.stock
+                    }
+                    total_price += i.item.price * i.amount
                     form.append(cart)
             message = '在庫が足りません。'
             return render(request, 'shopping/cart.html', {'message': message, 'form': form})
+    
     if not cart_items.exists():
         message = 'カートが空です。'
         return redirect('/shopping/cart/')
     
     total_price = sum(item.item.price * item.amount for item in cart_items)
+
+    if request.method == "POST":
+            purchase_form = forms.PurchaseForm(request.POST)
+            if purchase_form.is_valid():
+                payment_method = purchase_form.cleaned_data['payment_method']
+                address_option = request.POST.get('address_option')
+                if address_option == 'registered':
+                    address = user.address
+                else:
+                    address = purchase_form.cleaned_data['address']
+                return render(request, 'shopping/purchaseConfirm.html', {
+                    'cart_items': cart_items,
+                    'total_price': total_price,
+                    'payment_method': payment_method,
+                    'address': address,
+                })
+    else:
+        purchase_form = forms.PurchaseForm()
     
-    return render(request, 'shopping/purchaseConfirm.html', {'cart_items': cart_items, 'total_price': total_price})
+    return render(request, 'shopping/purchaseConfirm.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'purchase_form': purchase_form,
+        'user_address': user.address
+    })
+
 
 @is_login
 def purchase_commit(request):
@@ -215,10 +242,25 @@ def purchase_commit(request):
         if not cart_items.exists():
             message = 'カートが空です。'
             return redirect('shopping:cart')
+        
         purchase = models.Purchase(user_id=user_id)
         purchase.total_price = sum(item.item.price * item.amount for item in cart_items)
+        address_option = request.POST.get('address_option')
+        if address_option == 'registered':
+            user = User.objects.get(user_id=user_id)
+            purchase.address = user.address
+        else:
+            purchase.address = request.POST.get('address')
+        purchase.payment_method = request.POST.get('payment_method')
+        if purchase.payment_method == '0':
+            purchase_payment_method = '代金引換'
+        elif purchase.payment_method == '1':
+            purchase_payment_method = 'クレジットカード'
+        else:
+            purchase_payment_method = '銀行振込'
         purchase.save()
-        
+
+        purchase_details = []
         for item in cart_items:
             purchase_detail = models.PurchaseDetail(
                 purchase=purchase,
@@ -226,13 +268,12 @@ def purchase_commit(request):
                 amount=item.amount
             )
             purchase_detail.save()
-            
+            purchase_details.append(purchase_detail)
+
             item.item.stock -= item.amount
             item.item.save()
         cart_items.delete()
-        
-        message = '購入が完了しました。'
-        return render(request, 'shopping/purchaseCommit.html', {'message': message})
+        return render(request, 'shopping/purchaseCommit.html', {'purchase_details': purchase_details, 'purchase_payment_method': purchase_payment_method, 'purchase_address': purchase.address})
     
     return redirect('shopping:cart')
 
