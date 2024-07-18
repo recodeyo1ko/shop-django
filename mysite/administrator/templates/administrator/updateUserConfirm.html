@@ -1,17 +1,27 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員情報の更新</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>会員情報の更新確認</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>以下の会員情報で更新しますか？</h3>
     <br />
-    <form action="updateUserCommit.html" method="POST">
+    <form
+      method="POST"
+      action="{% url 'administrator:update_user_commit' user.user_id %}"
+    >
+      {% csrf_token %}
       <table>
         <tr>
           <th>会員ID</th>
-          <td>someone@example.com</td>
+          <td>{{ user.user_id }}</td>
         </tr>
         <tr>
           <th>パスワード</th>
@@ -19,17 +29,17 @@
         </tr>
         <tr>
           <th>お名前</th>
-          <td>テスト太郎</td>
+          <td>{{ user.name }}</td>
         </tr>
         <tr>
           <th>ご住所</th>
-          <td>東京都千代田区１－１－１</td>
+          <td>{{ user.address }}</td>
         </tr>
         <tr>
           <td colspan="2"><input type="submit" value="変更" /></td>
         </tr>
       </table>
     </form>
-    <a href="main.html">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
   </body>
 </html>

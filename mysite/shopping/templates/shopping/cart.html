@@ -41,7 +41,17 @@
             <button type="submit">更新</button>
           </form>
         </td>
-        <td><a href="/shopping/removeFromCart/{{ line.item_id }}/">削除</a></td>
+        <td>
+          <form
+            action="{% url 'shopping:remove_from_cart' line.item_id %}"
+            method="POST"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <input type="hidden" name="item_id" value="{{ line.item_id }}" />
+            <button type="submit">削除</button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </table>

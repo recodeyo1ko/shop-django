@@ -4,7 +4,9 @@ from . import models
 from . import forms
 from shopping.models import Item, Purchase, PurchaseDetail, Category
 from shopping.forms import SearchForm
+from account.models import User
 from .utils import is_admin_login
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger('login') # loggerを指定
 
@@ -14,8 +16,8 @@ def top(request):
     if "is_login" in request.session:
         message = "管理者としてログインする場合は、事前に一般ユーザからログアウトしてください"
         return render(request, "shopping/main.html", {"message": message})
-    
-    search_form = SearchForm() 
+    item_search_form = SearchForm() 
+    user_search_form = forms.UserSearchForm()
     return render(request, "administrator/main.html", locals())
 
 def admin_login(request):
@@ -202,3 +204,62 @@ def delete_item_commit(request, item_id):
     item = Item.objects.get(item_id=item_id)
     item.delete()
     return render(request, 'administrator/deleteItemCommit.html', {'item': item})
+
+@is_admin_login
+def user_search(request):
+    if request.method == 'GET':
+        user_search_form = forms.UserSearchForm(request.GET)
+        if user_search_form.is_valid():
+            user_id = request.GET.get('user_id')
+            if user_id:
+                users = User.objects.filter(user_id=user_id)
+            else:
+                users = User.objects.all()
+            return render(request, 'administrator/userSearch.html', {'users': users})
+        return redirect('administrator:user_search')
+
+@is_admin_login
+def update_user(request, user_id):
+    user = get_object_or_404(User, user_id=user_id)
+    user_form = forms.UserForm(instance=user)
+    return render(request, 'administrator/updateUser.html', {'user_form': user_form, 'user': user})
+
+@is_admin_login
+def update_user_confirm(request, user_id):
+    user = get_object_or_404(User, user_id=user_id)
+    form_data = request.POST
+    user_form = forms.UserForm(form_data, instance=user)
+    if user_form.is_valid():
+        request.session['user_form_data'] = form_data
+        return render(request, 'administrator/updateUserConfirm.html', {'user': user})
+    else:
+        print(user_form.errors)
+    return redirect('administrator:update_user', user_id=user_id)
+
+
+@is_admin_login
+def update_user_commit(request, user_id):
+    user = get_object_or_404(User, user_id=user_id)
+    form_data = request.session.pop('user_form_data', None)
+    if form_data:
+        user_form = forms.UserForm(form_data, instance=user)
+        if user_form.is_valid():
+            user_form.save()
+            return render(request, 'administrator/updateUserCommit.html', {'user': user})
+    return redirect('administrator:update_user', user_id=user_id)
+
+@is_admin_login
+def delete_user_confirm(request, user_id):
+    user = User.objects.get(user_id=user_id)
+    return render(request, 'administrator/deleteUserConfirm.html', {'user': user})
+
+@is_admin_login
+def delete_user_commit(request, user_id):
+    user = User.objects.get(user_id=user_id)
+    user_data = {
+        'user_id': user.user_id,
+        'name': user.name,
+        'address': user.address,
+    }
+    user.delete()
+    return render(request, 'administrator/deleteUserCommit.html', {'user': user_data})

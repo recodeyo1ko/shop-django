@@ -13,7 +13,7 @@
     <h3>管理者メインページ</h3>
     <h4>商品の検索</h4>
     <form action="{% url 'administrator:item_search' %}" method="GET">
-      {% csrf_token %} {{ search_form }}
+      {% csrf_token %} {{ item_search_form }}
       <input type="submit" value="検索" /><br />
     </form>
     <br />
@@ -72,16 +72,8 @@
     </form>
     <br />
     <h4>会員の検索</h4>
-    <form action="#" method="GET">
-      <table>
-        <tr>
-          <th>会員ID</th>
-          <td><input type="text" class="id" name="id" /></td>
-        </tr>
-        <tr>
-          <td colspan="2"><input type="submit" value="検索" /></td>
-        </tr>
-      </table>
-    </form>
+    <form action="{% url 'administrator:user_search' %}" method="GET">
+      {% csrf_token %} {{ user_search_form }}
+      <input type="submit" value="検索" /><br />
   </body>
 </html>

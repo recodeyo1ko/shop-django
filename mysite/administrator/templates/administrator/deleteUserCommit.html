@@ -1,8 +1,14 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>会員の削除完了</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>以下の会員を削除しました。</h3>
@@ -10,18 +16,18 @@
     <table>
       <tr>
         <th>会員ID</th>
-        <td>someone@example.com</td>
+        <td>{{ user.user_id }}</td>
       </tr>
       <tr>
         <th>名前</th>
-        <td>テスト太郎</td>
+        <td>{{ user.name }}</td>
       </tr>
       <tr>
         <th>住所</th>
-        <td>東京都千代田区１－１－１</td>
+        <td>{{ user.address }}</td>
       </tr>
     </table>
     <br />
-    <a href="main.html">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
   </body>
 </html>

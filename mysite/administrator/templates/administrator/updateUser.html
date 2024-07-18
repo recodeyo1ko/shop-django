@@ -1,48 +1,49 @@
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <title>会員情報の変更</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
   </head>
   <body>
     <h3>会員情報の変更</h3>
     <br />
-    <form action="updateUserConfirm.html" method="POST">
+    <form
+      method="POST"
+      action="{% url 'administrator:update_user_confirm' user.user_id %}"
+    >
+      {% csrf_token %}
       <table>
         <tr>
           <th>会員ID</th>
-          <td>someone@example.com</td>
+          <td>{{ user_form.user_id }}</td>
         </tr>
         <tr>
           <th>お名前</th>
-          <td>
-            <input type="text" name="name" class="id" value="テスト太郎" />
-          </td>
+          <td>{{ user_form.name }}</td>
         </tr>
         <tr>
           <th>パスワード</th>
-          <td><input type="password" class="password" name="password1" /></td>
+          <td>{{ user_form.password1 }}</td>
         </tr>
         <tr>
           <th>パスワード(確認)</th>
-          <td><input type="password" class="password" name="password2" /></td>
+          <td>{{ user_form.password2 }}</td>
         </tr>
         <tr>
           <th>ご住所</th>
-          <td>
-            <input
-              type="text"
-              name="address"
-              class="text"
-              value="東京都千代田区１－１－１"
-            />
-          </td>
+          <td>{{ user_form.address }}</td>
         </tr>
         <tr>
           <td colspan="2"><input type="submit" value="変更確認" /></td>
         </tr>
       </table>
     </form>
-    <a href="main.html">管理者メインページ</a>へ<br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a><br />
   </body>
 </html>
