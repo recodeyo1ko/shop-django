@@ -1,13 +1,50 @@
 {% load static %}
 <html>
-	<head>
-		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-		<title>注文のキャンセル完了</title>
-		<link rel='stylesheet' type='text/css' href='{% static "shopping/css/style.css" %}' />
-	</head>
-	<body>
-
-		<!-- 任意機能 -->
-
-	</body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>注文のキャンセル完了</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "shopping/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h3>以下の注文をキャンセルしました。</h3>
+    <br />
+    <table>
+      <tr>
+        <th>注文日</th>
+        <td>{{ cancel_purchase_cache.purchase_date }}</td>
+      </tr>
+      <tr>
+        <th>購入商品</th>
+        <td>
+          <table>
+            <tr>
+              <th>商品名</th>
+              <th>色</th>
+              <th>メーカー</th>
+              <th>単価</th>
+              <th>数量</th>
+            </tr>
+            {% for item in cancelled_purchase_details_cache %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ item.color }}</td>
+              <td>{{ item.manufacturer }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <th>配送先</th>
+        <td>{{cancel_purchase_cache.address }}</td>
+      </tr>
+    </table>
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
+  </body>
 </html>

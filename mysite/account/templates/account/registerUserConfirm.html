@@ -12,7 +12,7 @@
   <body>
     <h3>以下の情報で登録しますか？</h3>
     <br />
-    <form action="/account/registerUserCommit/" method="POST">
+    <form action="{% url 'account:register_user_commit' %}" method="POST">
       {% csrf_token %}
       <table>
         <tr>
@@ -40,7 +40,7 @@
         </tr>
       </table>
     </form>
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
   <script>
     inputs = document.getElementsByTagName("input");

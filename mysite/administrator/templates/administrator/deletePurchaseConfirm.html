@@ -3,28 +3,31 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>購入履歴一覧</title>
+    <title>購入の削除確認</title>
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
+      href='{% static "administrator/css/style.css" %}'
     />
   </head>
   <body>
-    <h3>購入履歴の一覧</h3>
+    <h3>以下の購入を削除しますか？</h3>
     <br />
     <table>
       <tr>
         <th>購入者ID</th>
-        <th>注文日</th>
-        <th>購入商品</th>
-        <th>配送先</th>
-        <th></th>
-      </tr>
-      {% for purchase in purchases %}
-      <tr>
         <td>{{ purchase.user.user_id }}</td>
+      </tr>
+      <tr>
+        <th>注文日</th>
         <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
+      </tr>
+      <tr>
+        <th>配送先</th>
+        <td>{{ purchase.address }}</td>
+      </tr>
+      <tr>
+        <th>購入商品</th>
         <td>
           <table>
             <tr>
@@ -34,27 +37,28 @@
               <th>単価</th>
               <th>数量</th>
             </tr>
-            {% for detail in purchase.purchasedetail_set.all %}
+            {% for detail in purchase_details %}
             <tr>
               <td>{{ detail.item.name }}</td>
               <td>{{ detail.item.color }}</td>
               <td>{{ detail.item.manufacturer }}</td>
               <td>{{ detail.item.price }}円</td>
-              <td>{{ detail.amount }} 個</td>
+              <td>{{ detail.amount }}個</td>
             </tr>
             {% endfor %}
           </table>
         </td>
-        <td>{{ purchase.address }}</td>
-        <td>
-          <a href="{% url 'administrator:delete_purchase' purchase.id %}">
-            キャンセル
-          </a>
-        </td>
       </tr>
-      {% endfor %}
     </table>
-    <br /><br />
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
+    <br />
+    <form
+      action="{% url 'administrator:delete_purchase' purchase.id %}"
+      method="POST"
+    >
+      {% csrf_token %}
+      <input type="submit" value="削除" />
+    </form>
+    <br />
+    <a href="{% url 'administrator:top' %}">戻る</a>
   </body>
 </html>

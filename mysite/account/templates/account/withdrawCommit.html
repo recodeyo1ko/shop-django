@@ -10,10 +10,10 @@
     />
   </head>
   <body>
-    {% if name %}
-    <h3>{{ name }}さん、退会処理を完了しました。</h3>
+    {% if user_name_cashe %}
+    <h3>{{ user_name_cashe }}さん、退会処理を完了しました。</h3>
     {% endif %}
     <h3>またのご利用をお待ちしております。</h3>
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

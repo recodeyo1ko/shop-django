@@ -11,10 +11,10 @@
   </head>
   <body>
     <h3>{{ request.session.user_name }}さん、本当に退会しますか？</h3>
-    <form action="/account/withdrawCommit/" method="POST">
+    <form action="{% url 'account:withdraw' %}" method="POST">
       {% csrf_token %}
       <td colspan="2"><input type="submit" value="退会" /></td>
     </form>
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

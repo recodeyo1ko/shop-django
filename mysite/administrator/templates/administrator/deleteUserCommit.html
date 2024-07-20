@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>会員の削除完了</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h3>以下の会員を削除しました。</h3>
+    <br />
+    <table>
+      <tr>
+        <th>会員ID</th>
+        <td>{{ user_cashe.user_id }}</td>
+      </tr>
+      <tr>
+        <th>名前</th>
+        <td>{{ user_cashe.name }}</td>
+      </tr>
+      <tr>
+        <th>住所</th>
+        <td>{{ user_cashe.address }}</td>
+      </tr>
+    </table>
+    <br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
+  </body>
+</html>

@@ -11,9 +11,12 @@
     />
   </head>
   <body>
-    <h1>ショッピングカート内の商品を削除</h1>
-    <p>{{ message }}</p>
-    <a href="/shopping/cart/">カートに戻る</a>
-    <a href="/">商品検索</a>へ<br />
+    <h3>以下の商品をショッピングカートから削除しました。</h3>
+    <br />
+    商品名: {{ item_in_cart_cache.name }} <br />
+    メーカー名: {{ item_in_cart_cache.manufacturer }}<br />
+    単価: {{ item_in_cart_cache.price }}円<br />
+    数量: {{ item_in_cart_cache.amount }}個<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

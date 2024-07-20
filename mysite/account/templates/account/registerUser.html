@@ -16,7 +16,7 @@
     <br />
     {% endif %}
 
-    <form action="/account/registerUser/" method="POST">
+    <form action="{% url 'account:register_user' %}" method="POST">
       {% csrf_token %}
       <table>
         {{ register_form }}
@@ -25,6 +25,6 @@
         </tr>
       </table>
     </form>
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

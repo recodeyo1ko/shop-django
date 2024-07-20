@@ -12,7 +12,7 @@
   <body>
     <h3>会員情報</h3>
     <br />
-    <form action="/account/updateUser/" method="POST">
+    <form action="{% url 'account:update_user' %}" method="POST">
       {% csrf_token %}
       <table>
         {{ register_form }}
@@ -26,9 +26,9 @@
       <div>{{ message }}</div>
       {% endif %}
     </form>
-    <a href="/account/withdraw/">退会する</a><br /><br />
-    <a href="/shopping/purchaseHistory/">購入履歴（任意機能）</a>へ<br />
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'account:withdraw' %}">退会する</a><br />
+    <a href="{% url 'shopping:purchase_history' %}">購入履歴</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
   <script>
     initial = "{{ initial }}";

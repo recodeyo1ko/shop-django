@@ -21,39 +21,59 @@
         <th>数量</th>
         <th>削除</th>
       </tr>
-      {% for line in form %}
+      {% for cart_item in cart_items %}
       <tr>
-        <td>{{ line.name }}</td>
-        <td>{{ line.color }}</td>
-        <td>{{ line.manufacturer }}</td>
-        <td>{{ line.price }}円</td>
+        <td>{{ cart_item.item.name }}</td>
+        <td>{{ cart_item.item.color }}</td>
+        <td>{{ cart_item.item.manufacturer }}</td>
+        <td>{{ cart_item.item.price }}円</td>
         <td>
-          <form method="POST" action="/shopping/amountInCart/">
+          <form
+            method="POST"
+            action="{% url 'shopping:amount_in_cart' cart_item.item_id %}"
+          >
             {% csrf_token %}
-            <input type="hidden" name="itemId" value="{{ line.item_id }}" />
+            <input
+              type="hidden"
+              name="itemId"
+              value="{{ cart_item.item_id }}"
+            />
             <input
               type="number"
               name="amount"
-              value="{{ line.amount }}"
+              value="{{ cart_item.amount }}"
               min="1"
-              max="{{ line.stock }}"
+              max="{{ cart_item.item.stock }}"
             />
             <button type="submit">更新</button>
           </form>
         </td>
-        <td><a href="/shopping/removeFromCart/{{ line.item_id }}/">削除</a></td>
+        <td>
+          <form
+            action="{% url 'shopping:remove_from_cart' cart_item.item_id %}"
+            method="POST"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <input
+              type="hidden"
+              name="item_id"
+              value="{{ cart_item.item_id }}"
+            />
+            <button type="submit">削除</button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </table>
-    <form method="POST" action="/shopping/removeFromAllCart/">
+    <form action="{% url 'shopping:remove_from_all_cart' %}" method="POST">
       {% csrf_token %}
       <button type="submit">カートを空にする</button>
     </form>
     {% if total_price %} 合計 {{ total_price }} 円<br />
-    <form action="/shopping/purchase/" method="POST">
+    <form action="{% url 'shopping:purchase' %}" method="POST">
       {% csrf_token %}
-
-      <input type="submit" value="購入する (任意機能)" />
+      <input type="submit" value="購入する" />
     </form>
     <br />
     {% endif %} {% if message %} {{ message }}<br />

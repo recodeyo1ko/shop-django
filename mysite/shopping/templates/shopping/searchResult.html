@@ -20,15 +20,17 @@
         <th>メーカー名</th>
         <th>価格</th>
       </tr>
-      {%for line in form%}
+      {%for item in items%}
       <tr>
         <td>
-          <a href="/shopping/item/{{line.item_id}}">{{line.name}}</a>
-          <sup>{{line.recommended}}</sup>
+          <a href="{% url 'shopping:item_detail' item.item_id %}">
+            {{item.name}}
+          </a>
+          <sup>{{item.recommended}}</sup>
         </td>
-        <td>{{line.color}}</td>
-        <td>{{line.manufacturer}}</td>
-        <td>{{line.price}}円</td>
+        <td>{{item.color}}</td>
+        <td>{{item.manufacturer}}</td>
+        <td>{{item.price}}円</td>
       </tr>
       {% endfor %}
     </table>

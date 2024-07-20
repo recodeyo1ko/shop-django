@@ -11,49 +11,54 @@
     />
   </head>
   <body>
-    <h1>購入履歴</h1>
+    <h3>購入履歴の一覧</h3>
+
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     <table>
-      <thead>
-        <tr>
-          <th>注文ID</th>
-          <th>注文日時</th>
-          <th>注文詳細</th>
-          <th>合計金額</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for purchase in purchases %}
-        <tr>
-          <td>{{ purchase.id }}</td>
-          <td>{{ purchase.purchase_date }}</td>
-          <td>
-            <table class="nested-table">
-              <thead>
-                <tr>
-                  <th>商品名</th>
-                  <th>価格</th>
-                  <th>数量</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in purchase.purchasedetail_set.all %}
-                <tr>
-                  <td>{{ item.item.name }}</td>
-                  <td>{{ item.item.price }}</td>
-                  <td>{{ item.amount }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </td>
-          <td>{{ purchase.total_price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
+      <tr>
+        <th>注文日</th>
+        <th>購入商品</th>
+        <th>配送先</th>
+        <th></th>
+      </tr>
+      {% for purchase in purchases %}
+      <tr>
+        <td>{{ purchase.purchase_date }}</td>
+        <td>
+          <table>
+            <tr>
+              <th>商品名</th>
+              <th>色</th>
+              <th>メーカー</th>
+              <th>単価</th>
+              <th>数量</th>
+            </tr>
+            {% for item in purchase.purchasedetail_set.all %}
+            <tr>
+              <td>{{ item.item.name }}</td>
+              <td>{{ item.item.color }}</td>
+              <td>{{ item.item.manufacturer }}</td>
+              <td>{{ item.item.price }}</td>
+              <td>{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
+        <td>{{purchase.address }}</td>
+        <td>
+          <a href="{% url 'shopping:purchase_cancel' purchase.id %}"
+            >キャンセル</a
+          >
+        </td>
+      </tr>
+
+      {% endfor %}
     </table>
 
-    <a href="/shopping/cart/">カートに戻る</a>
+    <a href="{% url 'shopping:cart' %}">カートに戻る</a>
     <br />
-    <a href="/">商品検索</a>へ<br />
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

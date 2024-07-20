@@ -20,10 +20,7 @@ class Item(models.Model):
   stock = models.IntegerField(default=0) 
   recommended = models.BooleanField(default=False) 
   category = models.ForeignKey('Category',on_delete=models.CASCADE,) #外部キー 
-  
-  def __str__(self): 
-    return self.name 
-  
+
   class Meta: 
     ordering = ["-item_id"] 
     verbose_name = "商品" 
@@ -44,6 +41,8 @@ class ItemsInCart(models.Model):
 
 class Purchase(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_method = models.IntegerField(default=0)
+    address = models.CharField(max_length=256)
     total_price = models.IntegerField(default=0.0)
     purchase_date = models.DateTimeField(auto_now_add=True)
 

@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>商品の登録確認</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h3>以下の商品を登録しますか？</h3>
+    <br />
+    <form method="POST" action="{% url 'administrator:register_item_commit' %}">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>商品名</th>
+          <td>{{ item.name }}</td>
+        </tr>
+        <tr>
+          <th>商品の色</th>
+          <td>{{ item.color }}</td>
+        </tr>
+        <tr>
+          <th>メーカー名</th>
+          <td>{{ item.manufacturer }}</td>
+        </tr>
+        <tr>
+          <th>カテゴリ</th>
+          <td>{{ item.category.name }}</td>
+        </tr>
+        <tr>
+          <th>オススメ</th>
+          <td>
+            {% if item.recommended %}オススメする{% else %}
+            <br />
+            {%endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>価格</th>
+          <td>{{ item.price }} 円</td>
+        </tr>
+        <tr>
+          <th>在庫数</th>
+          <td>{{ item.stock }} 個</td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="登録" /></td>
+        </tr>
+      </table>
+      <input type="hidden" name="name" value="{{ item.name }}" />
+      <input type="hidden" name="color" value="{{ item.color }}" />
+      <input
+        type="hidden"
+        name="manufacturer"
+        value="{{ item.manufacturer }}"
+      />
+      <input
+        type="hidden"
+        name="category"
+        value="{{ item.category.category_id }}"
+      />
+      <input type="hidden" name="recommended" value="{{ item.recommended }}" />
+      <input type="hidden" name="price" value="{{ item.price }}" />
+      <input type="hidden" name="stock" value="{{ item.stock }}" />
+    </form>
+    <a href="{% url 'administrator:register_item' %}">戻る</a>
+  </body>
+</html>

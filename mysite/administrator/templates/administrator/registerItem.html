@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>商品の登録</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h3>商品の登録</h3>
+    <br />
+    <form method="POST" action="{% url 'administrator:register_item' %}">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>商品名</th>
+          <td>{{ item_form.name }}</td>
+        </tr>
+        <tr>
+          <th>商品の色</th>
+          <td>{{ item_form.color }}</td>
+        </tr>
+        <tr>
+          <th>メーカー名</th>
+          <td>{{ item_form.manufacturer }}</td>
+        </tr>
+        <tr>
+          <th>カテゴリ</th>
+          <td>{{ item_form.category }}</td>
+        </tr>
+        <tr>
+          <th>オススメ</th>
+          <td>{{ item_form.recommended }} オススメする</td>
+        </tr>
+        <tr>
+          <th>価格</th>
+          <td>{{ item_form.price }} 円</td>
+        </tr>
+        <tr>
+          <th>在庫数</th>
+          <td>{{ item_form.stock }} 個</td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="登録確認" /></td>
+        </tr>
+      </table>
+    </form>
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
+  </body>
+</html>

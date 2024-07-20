@@ -1,6 +1,7 @@
 from django import forms
 from . import models
 from shopping.models import Item, Purchase, PurchaseDetail, Category
+from account.models import User
 
 class AdminLoginForm(forms.Form):
     admin_id = forms.CharField(label="管理者ID", max_length=128)
@@ -20,3 +21,43 @@ class ItemForm(forms.ModelForm):
     class Meta:
             model = Item
             fields = ['name', 'manufacturer', 'color', 'price', 'stock', 'recommended', 'category']
+
+class UserSearchForm(forms.Form):
+    user_id = forms.IntegerField(label="ユーザID", required=False)
+    
+    class Meta:
+        model = User
+        fields = ['user_id']
+
+class UserForm(forms.ModelForm):
+    password1 = forms.CharField(
+    label="パスワード",
+    max_length=256,
+    widget=forms.PasswordInput(
+      render_value=True, attrs={'class': 'form-control'}
+      )
+    )
+    password2 = forms.CharField(
+    label="パスワード(確認)",
+    max_length=256,
+    widget=forms.PasswordInput(
+      render_value=True,
+      attrs={'class': 'form-control' }
+      )
+    )
+    
+    name = forms.CharField(
+    label="お名前",
+    max_length=128,
+    widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    address = forms.CharField(
+    label="ご住所",
+    max_length=256,
+    widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['user_id', 'password1', 'password2', 'name', 'address']

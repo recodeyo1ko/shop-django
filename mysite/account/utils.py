@@ -1,9 +1,9 @@
 from django.shortcuts import redirect
 
-def is_admin_login(view_func):
+def is_login(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
-        if "admin_id" in request.session:
+        if "is_login" in request.session:
             return view_func(request, *args, **kwargs)
         else:
-            return redirect("administrator:admin_login")
+            return redirect('account:login')
     return _wrapped_view_func

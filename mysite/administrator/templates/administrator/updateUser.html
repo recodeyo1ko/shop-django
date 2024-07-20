@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>会員情報の変更</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'administrator/css/style.css' %}"
+    />
+  </head>
+  <body>
+    <h3>会員情報の変更</h3>
+    <br />
+    <form
+      method="POST"
+      action="{% url 'administrator:update_user' user.user_id %}"
+    >
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>会員ID</th>
+          <td>{{ user_form.user_id }}</td>
+        </tr>
+        <tr>
+          <th>お名前</th>
+          <td>{{ user_form.name }}</td>
+        </tr>
+        <tr>
+          <th>パスワード</th>
+          <td>{{ user_form.password1 }}</td>
+        </tr>
+        <tr>
+          <th>パスワード(確認)</th>
+          <td>{{ user_form.password2 }}</td>
+        </tr>
+        <tr>
+          <th>ご住所</th>
+          <td>{{ user_form.address }}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" value="変更確認" /></td>
+        </tr>
+      </table>
+    </form>
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a><br />
+  </body>
+</html>

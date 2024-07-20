@@ -1,0 +1,51 @@
+{% load static %}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>商品の削除完了</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "administrator/css/style.css" %}'
+    />
+  </head>
+  <body>
+    <h3>以下の商品の削除を完了しました。</h3>
+    <br />
+    <table>
+      <tr>
+        <th>商品名</th>
+        <td>{{ item.name }}</td>
+      </tr>
+      <tr>
+        <th>商品の色</th>
+        <td>{{ item.color }}</td>
+      </tr>
+      <tr>
+        <th>メーカー名</th>
+        <td>{{ item.manufacturer }}</td>
+      </tr>
+      <tr>
+        <th>カテゴリ</th>
+        <td>{{ item.category.name }}</td>
+      </tr>
+      <tr>
+        <th>オススメ</th>
+        <td>
+          {% if item.recommended %} オススメする {% else %} おススメしない<br />
+          {%endif %}
+        </td>
+      </tr>
+      <tr>
+        <th>価格</th>
+        <td>{{ item.price }} 円</td>
+      </tr>
+      <tr>
+        <th>在庫数</th>
+        <td>{{ item.stock }} 個</td>
+      </tr>
+    </table>
+    <br />
+    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
+  </body>
+</html>
