@@ -4,7 +4,6 @@ from . import views
 app_name = "account"
 
 urlpatterns = [
-    path('', views.index, name='index'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('registerUser/', views.register_user, name='register_user'),
@@ -13,6 +12,4 @@ urlpatterns = [
     path('updateUser/', views.update_user, name='update_user'),
     path('updateUserCommit/', views.update_user_commit, name='update_user_commit'),
     path('withdraw/', views.withdraw, name='withdraw'),
-    path('withdrawCommit/', views.withdraw_commit, name='withdraw_commit'),
-
 ]

@@ -29,7 +29,7 @@
     </table>
     <br />
     <form
-      action="{% url 'administrator:delete_user_commit' user.user_id %}"
+      action="{% url 'administrator:delete_user' user.user_id %}"
       method="POST"
     >
       {% csrf_token %}

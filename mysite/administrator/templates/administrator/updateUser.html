@@ -15,7 +15,7 @@
     <br />
     <form
       method="POST"
-      action="{% url 'administrator:update_user_confirm' user.user_id %}"
+      action="{% url 'administrator:update_user' user.user_id %}"
     >
       {% csrf_token %}
       <table>

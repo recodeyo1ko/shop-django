@@ -20,32 +20,29 @@
         <th>単価</th>
         <th>数量</th>
       </tr>
-      {% for item in cart_items %}
+      {% for cart_item in cart_items %}
       <tr>
-        <td>{{ item.item.name }}</td>
-        <td>{{ item.item.color }}</td>
-        <td>{{ item.item.manufacturer }}</td>
-        <td>{{ item.item.price }}円</td>
-        <td>{{ item.amount }}個</td>
+        <td>{{ cart_item.item.name }}</td>
+        <td>{{ cart_item.item.color }}</td>
+        <td>{{ cart_item.item.manufacturer }}</td>
+        <td>{{ cart_item.item.price }}円</td>
+        <td>{{ cart_item.amount }}個</td>
       </tr>
       {% endfor %}
     </table>
+
     <p>合計金額: {{ total_price }}円</p>
+
     <form action="{% url 'shopping:purchase_commit' %}" method="post">
-      {% csrf_token %}
-      <input type="hidden" name="item_id" value="{{ item.item_id }}" />
-      <input type="hidden" name="quantity" value="{{ item.amount }}" />
-      清算方法<br />
-      <select name="payment_method">
-        <option value="0" selected>代金引換</option></select
-      ><br /><br />
+      {% csrf_token %} 清算方法<br />
+      {{ purchase_form.payment_method }}<br />
       配送先<br />
       <input type="radio" name="address_option" value="registered" checked />
-      ご自宅: {{ user_address }}<br /><br />
+      ご自宅: {{ user_address }}<br />
       <input type="radio" name="address_option" value="another" />
       配送先を指定<br />
       ご住所<br />
-      <input type="text" name="address" /><br /><br />
+      {{ purchase_form.address }}<br />
       購入しますか？<br />
       <button type="submit">購入する</button>
     </form>

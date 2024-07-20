@@ -14,7 +14,7 @@
     <h3>商品の登録情報変更</h3>
     <br />
     <form
-      action="{% url 'administrator:update_item_confirm' item.item_id %}"
+      action="{% url 'administrator:update_item' item.item_id %}"
       method="POST"
     >
       {% csrf_token %}

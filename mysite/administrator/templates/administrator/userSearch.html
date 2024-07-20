@@ -27,9 +27,7 @@
         <td>{{ user.address }}</td>
         <td>
           <a href="{% url 'administrator:update_user' user.user_id %}">変更</a>
-          <a href="{% url 'administrator:delete_user_confirm' user.user_id %}"
-            >削除</a
-          >
+          <a href="{% url 'administrator:delete_user' user.user_id %}">削除</a>
         </td>
       </tr>
       {% endfor %}

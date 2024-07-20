@@ -14,10 +14,9 @@
     <h3>会員情報</h3>
     <br />
     <table>
-      {% if id %}
       <tr>
         <th>会員ID</th>
-        <td>{{ id }}</td>
+        <td>{{ user.user_id }}</td>
       </tr>
       <tr>
         <th>パスワード</th>
@@ -25,18 +24,17 @@
       </tr>
       <tr>
         <th>お名前</th>
-        <td>{{ name }}</td>
+        <td>{{ user.name }}</td>
       </tr>
       <tr>
         <th>ご住所</th>
-        <td>{{ address }}</td>
+        <td>{{ user.address }}</td>
       </tr>
-      {% endif %}
     </table>
     <br />
-    <a href="/account/updateUser/">会員情報の変更</a>
+    <a href="{% url 'account:update_user' %}">会員情報の変更</a>
     <br />
-    <a href="/">商品検索</a>へ
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
     <br />
   </body>
 </html>

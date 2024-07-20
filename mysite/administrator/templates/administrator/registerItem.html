@@ -13,10 +13,7 @@
   <body>
     <h3>商品の登録</h3>
     <br />
-    <form
-      method="POST"
-      action="{% url 'administrator:register_item_confirm' %}"
-    >
+    <form method="POST" action="{% url 'administrator:register_item' %}">
       {% csrf_token %}
       <table>
         <tr>

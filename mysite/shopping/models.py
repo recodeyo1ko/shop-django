@@ -20,10 +20,7 @@ class Item(models.Model):
   stock = models.IntegerField(default=0) 
   recommended = models.BooleanField(default=False) 
   category = models.ForeignKey('Category',on_delete=models.CASCADE,) #外部キー 
-  
-  def __str__(self): 
-    return self.name 
-  
+
   class Meta: 
     ordering = ["-item_id"] 
     verbose_name = "商品" 

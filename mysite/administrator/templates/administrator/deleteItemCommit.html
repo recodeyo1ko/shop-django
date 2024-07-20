@@ -1,8 +1,13 @@
+{% load static %}
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>商品の削除完了</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href='{% static "administrator/css/style.css" %}'
+    />
   </head>
   <body>
     <h3>以下の商品の削除を完了しました。</h3>
@@ -26,7 +31,10 @@
       </tr>
       <tr>
         <th>オススメ</th>
-        <td>{{ item.recommended }}</td>
+        <td>
+          {% if item.recommended %} オススメする {% else %} おススメしない<br />
+          {%endif %}
+        </td>
       </tr>
       <tr>
         <th>価格</th>

@@ -13,11 +13,14 @@
   <body>
     <h1>カートを空にする</h1>
     <p>本当にカート内のすべての商品を削除しますか？</p>
-    <form method="POST" action="/shopping/removeFromAllCartCommit/">
+    <form
+      method="POST"
+      action="{% url 'shopping:remove_from_all_cart_commit' %}"
+    >
       {% csrf_token %}
       <button type="submit">はい、削除します</button>
     </form>
     <br />
-    <a href="/shopping/cart/">いいえ、キャンセルします</a>
+    <a href="{% url 'shopping:cart' %}">カートに戻る</a>
   </body>
 </html>

@@ -12,25 +12,18 @@ urlpatterns = [
 
   # 注文関連
   path('purchaseIndex/', views.purchase_index, name="purchase_index"),
-  path('deletePurchaseConfirm/<int:purchase_id>/', views.delete_purchase_confirm, name="delete_purchase_confirm"),
-  path('deletePurchaseCommit/<int:purchase_id>/', views.delete_purchase_commit, name="delete_purchase_commit"),
+  path('deletePurchaseConfirm/<int:purchase_id>/', views.delete_purchase, name="delete_purchase"),
 
   # item関連
   path('registerItem/', views.register_item, name="register_item"),
   path('registerItemCommit/', views.register_item_commit, name="register_item_commit"),
-  path('registerItemConfirm/', views.register_item_confirm, name="register_item_confirm"),
   path('updateItem/<int:item_id>/', views.update_item, name="update_item"),
   path('updateItemCommit/<int:item_id>/', views.update_item_commit, name="update_item_commit"),
-  path('updateItemConfirm/<int:item_id>/', views.update_item_confirm, name="update_item_confirm"),
-  path('deleteItemConfirm/<int:item_id>/', views.delete_item_confirm, name="delete_item_confirm"),
-  path('deleteItemCommit/<int:item_id>/', views.delete_item_commit, name="delete_item_commit"),
-
+  path('deleteItemConfirm/<int:item_id>/', views.delete_item, name="delete_item"),
 
   # user関連
   path('updateUser/<int:user_id>/', views.update_user, name="update_user"),
   path('updateUserCommit/<int:user_id>/', views.update_user_commit, name="update_user_commit"),
-  path('updateUserConfirm/<int:user_id>/', views.update_user_confirm, name="update_user_confirm"),
-  path('deleteUserConfirm/<int:user_id>/', views.delete_user_confirm, name="delete_user_confirm"),
-  path('deleteUserCommit/<int:user_id>/', views.delete_user_commit, name="delete_user_commit"),
+  path('deleteUser/<int:user_id>/', views.delete_user, name="delete_user"),
 
 ]

@@ -13,45 +13,44 @@
     <h3>商品の詳細表示</h3>
     <br />
     <table>
-      {%for line in form%}
       <tr>
         <th>商品名</th>
-        <td>{{line.name}}</td>
+        <td>{{item.name}}</td>
       </tr>
       <tr>
         <th>商品の色</th>
-        <td>{{line.color}}</td>
+        <td>{{item.color}}</td>
       </tr>
       <tr>
         <th>メーカー名</th>
-        <td>{{line.manufacturer}}</td>
+        <td>{{item.manufacturer}}</td>
       </tr>
       <tr>
         <th>価格</th>
-        <td>{{line.price}}円</td>
+        <td>{{item.price}}円</td>
       </tr>
       <tr>
         <th>在庫数</th>
-        <td>{{line.stock}}個</td>
+        <td>{{item.stock}}個</td>
       </tr>
-      {% endfor %}
     </table>
     {% if message %} {{ message }}<br />
     {% endif %}
-    <form action="/shopping/addToCart/" method="POST">
-      {% csrf_token %} 数量 {% for line in form %} {% if line.stock >= 1 %}
+
+    <form action="{% url 'shopping:add_to_cart' %}" method="post">
+      {% csrf_token %} 数量: {% if item.stock >= 1 %}
       <select name="amount">
-        {% with ''|center:line.stock as range %} {% for _ in range %}
-        <option value="{{forloop.counter}}">{{forloop.counter}}</option>
-        {% endfor %} {% endwith %}</select
-      ><br />
-      <input type="hidden" name="itemId" value="{{line.item_id}}" />
+        {% for i in stock_range %}
+        <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+      <br />
+      <input type="hidden" name="itemId" value="{{ item.item_id }}" />
       <input type="submit" value="ショッピングカートに入れる" /><br />
-      {% endif %} {% endfor %}
-      ※ログインしていない状態では、ボタンのクリック後、<a href="/account/login/"
-        >ログイン画面</a
-      >に転送される。<br />
+      {% endif %} ※ログインしていない状態では、ボタンのクリック後、
+      <a href="{% url 'account:login' %}">ログイン画面</a>に転送される。<br />
     </form>
-    <a href="/">商品検索</a>へ<br />
+
+    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
   </body>
 </html>

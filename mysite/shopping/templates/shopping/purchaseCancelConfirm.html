@@ -46,9 +46,13 @@
       </tr>
       <tr>
         <td colspan="2">
-          <form action="{% url 'shopping:purchase_cancel_commit' purchase.id %}" method="post">
+          <form
+            action="{% url 'shopping:purchase_cancel' purchase.id %}"
+            method="post"
+          >
             {% csrf_token %}
             <button type="submit">キャンセルする</button>
+          </form>
         </td>
       </tr>
     </table>

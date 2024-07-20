@@ -21,21 +21,24 @@
         <th>単価</th>
         <th>数量</th>
       </tr>
-      {% for item in purchase_details %}
+      {% for purchase_detail in purchase_details %}
       <tr>
-        <td>{{ item.item.name }}</td>
-        <td>{{ item.item.color }}</td>
-        <td>{{ item.item.manufacturer }}</td>
-        <td>{{ item.item.price }}円</td>
-        <td>{{ item.amount }}個</td>
+        <td>{{ purchase_detail.item.name }}</td>
+        <td>{{ purchase_detail.item.color }}</td>
+        <td>{{ purchase_detail.item.manufacturer }}</td>
+        <td>{{ purchase_detail.item.price }}円</td>
+        <td>{{ purchase_detail.amount }}個</td>
       </tr>
       {% endfor %}
     </table>
-    合計 {{ total_price }} 円<br /><br />
+    合計 {{ purchase.total_price }} 円<br /><br />
     清算方法: <br />
-    {{ purchase_payment_method}}
+    {% if purchase.payment_method == '0' %} 代金引換
+    <br />
+    {% else %} クレジットカード {% endif %}
+
     <br /><br />
-    配送先 {{purchase_address}}<br /><br />
+    配送先 <br />{{purchase.address}}<br />
     <br /><br />
     <a href="{% url 'shopping:cart' %}">カートに戻る</a>
     <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />

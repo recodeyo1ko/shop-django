@@ -47,10 +47,9 @@
         </td>
         <td>{{ purchase.address }}</td>
         <td>
-          <a
-            href="{% url 'administrator:delete_purchase_confirm' purchase.id %}"
-            >キャンセル</a
-          >
+          <a href="{% url 'administrator:delete_purchase' purchase.id %}">
+            キャンセル
+          </a>
         </td>
       </tr>
       {% endfor %}

@@ -13,6 +13,9 @@
   <body>
     <h3>購入履歴の一覧</h3>
 
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     <table>
       <tr>
         <th>注文日</th>
@@ -45,7 +48,7 @@
         </td>
         <td>{{purchase.address }}</td>
         <td>
-          <a href="{% url 'shopping:purchase_cancel_confirm' purchase.id %}"
+          <a href="{% url 'shopping:purchase_cancel' purchase.id %}"
             >キャンセル</a
           >
         </td>

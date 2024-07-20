@@ -14,13 +14,20 @@
     <h3>以下の商品をショッピングカートから削除してよろしいですか？</h3>
     {% if message %}
     <p>{{ message }}</p>
-    {% endif %} 商品名: {{ item.item.name }} <br />
-    メーカー名: {{ item.item.manufacturer }}<br />
-    単価: {{ item.item.price }}円<br />
-    数量: {{ item.amount }}個<br />
-    <form method="POST" action="/shopping/removeFromCartCommit/">
+    {% endif %} 商品名: {{ item_in_cart.item.name }} <br />
+    メーカー名: {{ item_in_cart.item.manufacturer }}<br />
+    単価: {{ item_in_cart.item.price }}円<br />
+    数量: {{ item_in_cart.amount }}個<br />
+    <form
+      method="POST"
+      action="{% url 'shopping:remove_from_cart_commit' item_in_cart.item.item_id %}"
+    >
       {% csrf_token %}
-      <input type="hidden" name="item_id" value="{{ item.item.item_id }}" />
+      <input
+        type="hidden"
+        name="item_id"
+        value="{{ item_in_cart.item.item_id }}"
+      />
       <button type="submit">削除する</button>
     </form>
     <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
