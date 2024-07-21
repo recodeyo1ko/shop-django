@@ -1,22 +1,27 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ショッピングカート内の商品を削除</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>以下の商品をショッピングカートから削除しました。</h3>
-    <br />
-    商品名: {{ item_in_cart_cache.name }} <br />
-    メーカー名: {{ item_in_cart_cache.manufacturer }}<br />
-    単価: {{ item_in_cart_cache.price }}円<br />
-    数量: {{ item_in_cart_cache.amount }}個<br />
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}カート内の商品を削除{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の商品をショッピングカートから削除しました。
+  </h3>
+  <div class="mb-4">
+    <p class="text-lg">
+      <strong>商品名:</strong> {{ item_in_cart_cache.name }}
+    </p>
+    <p class="text-lg">
+      <strong>メーカー名:</strong> {{ item_in_cart_cache.manufacturer }}
+    </p>
+    <p class="text-lg">
+      <strong>単価:</strong> {{ item_in_cart_cache.price }}円
+    </p>
+    <p class="text-lg">
+      <strong>数量:</strong> {{ item_in_cart_cache.amount }}個
+    </p>
+  </div>
+  <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+    >商品検索</a
+  >へ<br />
+</div>
+
+{% endblock %}

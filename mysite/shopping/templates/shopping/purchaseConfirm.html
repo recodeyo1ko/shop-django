@@ -1,53 +1,101 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>商品の購入確認</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>以下の商品を購入しますか？</h3>
-    <table>
-      <tr>
-        <th>商品名</th>
-        <th>商品の色</th>
-        <th>メーカー名</th>
-        <th>単価</th>
-        <th>数量</th>
-      </tr>
-      {% for cart_item in cart_items %}
-      <tr>
-        <td>{{ cart_item.item.name }}</td>
-        <td>{{ cart_item.item.color }}</td>
-        <td>{{ cart_item.item.manufacturer }}</td>
-        <td>{{ cart_item.item.price }}円</td>
-        <td>{{ cart_item.amount }}個</td>
-      </tr>
-      {% endfor %}
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}購入確認{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の商品を購入しますか？
+  </h3>
+  <div class="overflow-x-auto mb-6">
+    <table class="min-w-full bg-white border border-gray-200 mb-6">
+      <thead>
+        <tr class="bg-gray-100 border-b">
+          <th class="p-4 text-left">商品名</th>
+          <th class="p-4 text-left">商品の色</th>
+          <th class="p-4 text-left">メーカー名</th>
+          <th class="p-4 text-left">単価</th>
+          <th class="p-4 text-left">数量</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cart_item in cart_items %}
+        <tr class="border-b border-gray-200">
+          <td class="p-4">{{ cart_item.item.name }}</td>
+          <td class="p-4">{{ cart_item.item.color }}</td>
+          <td class="p-4">{{ cart_item.item.manufacturer }}</td>
+          <td class="p-4">{{ cart_item.item.price }}円</td>
+          <td class="p-4">{{ cart_item.amount }}個</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 
-    <p>合計金額: {{ total_price }}円</p>
+  <p class="text-xl font-semibold mb-6">合計金額: {{ total_price }}円</p>
 
-    <form action="{% url 'shopping:purchase_commit' %}" method="post">
-      {% csrf_token %} 清算方法<br />
-      {{ purchase_form.payment_method }}<br />
-      配送先<br />
-      <input type="radio" name="address_option" value="registered" checked />
-      ご自宅: {{ user_address }}<br />
-      <input type="radio" name="address_option" value="another" />
-      配送先を指定<br />
-      ご住所<br />
-      {{ purchase_form.address }}<br />
-      購入しますか？<br />
-      <button type="submit">購入する</button>
-    </form>
-    <a href="{% url 'shopping:cart' %}">カートに戻る</a>
-    <br />
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+  <form
+    action="{% url 'shopping:purchase_commit' %}"
+    method="post"
+    class="mb-6"
+  >
+    {% csrf_token %}
+    <div class="mb-4">
+      <label
+        for="payment_method"
+        class="block text-sm font-medium text-gray-700"
+        >清算方法</label
+      >
+      {{ purchase_form.payment_method }}
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">配送先</label>
+      <div class="mt-1">
+        <input
+          type="radio"
+          id="address_option_registered"
+          name="address_option"
+          value="registered"
+          checked
+          class="mr-2"
+        />
+        <label for="address_option_registered" class="text-sm"
+          >ご自宅: {{ user_address }}</label
+        >
+      </div>
+      <div class="mt-1">
+        <input
+          type="radio"
+          id="address_option_another"
+          name="address_option"
+          value="another"
+          class="mr-2"
+        />
+        <label for="address_option_another" class="text-sm">配送先を指定</label>
+      </div>
+      <div class="mt-2">
+        <label for="address" class="block text-sm font-medium text-gray-700"
+          >ご住所</label
+        >
+        {{ purchase_form.address }}
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      購入する
+    </button>
+  </form>
+
+  <div class="mt-4">
+    <a href="{% url 'shopping:cart' %}" class="text-blue-500 hover:underline"
+      >カートに戻る</a
+    >
+    <a
+      href="{% url 'shopping:index' %}"
+      class="text-blue-500 hover:underline ml-4"
+      >商品検索</a
+    >
+  </div>
+</div>
+
+{% endblock %}

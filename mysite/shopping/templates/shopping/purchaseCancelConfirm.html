@@ -1,61 +1,78 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>注文済み商品のキャンセル</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "shopping/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h3>以下の注文をキャンセルしてよろしいですか？</h3>
-    <br />
-    <table>
-      <tr>
-        <th>注文日</th>
-        <td>{{ purchase.purchase_date }}</td>
-      </tr>
-      <tr>
-        <th>購入商品</th>
-        <td>
-          <table>
-            <tr>
-              <th>商品名</th>
-              <th>色</th>
-              <th>メーカー</th>
-              <th>単価</th>
-              <th>数量</th>
-            </tr>
-            {% for item in purchase.purchasedetail_set.all %}
-            <tr>
-              <td>{{ item.item.name }}</td>
-              <td>{{ item.item.color }}</td>
-              <td>{{ item.item.manufacturer }}</td>
-              <td>{{ item.item.price }}</td>
-              <td>{{ item.amount }}</td>
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <th>配送先</th>
-        <td>{{purchase.address }}</td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <form
-            action="{% url 'shopping:purchase_cancel' purchase.id %}"
-            method="post"
-          >
-            {% csrf_token %}
-            <button type="submit">キャンセルする</button>
-          </form>
-        </td>
-      </tr>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}注文のキャンセル確認{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の注文をキャンセルしてよろしいですか？
+  </h3>
+  <div class="overflow-x-auto mb-6">
+    <table class="min-w-full bg-white border border-gray-200">
+      <colgroup>
+        <col class="w-1/3" />
+        <col class="w-2/3" />
+      </colgroup>
+      <tbody>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">注文日</th>
+          <td class="p-4">{{ purchase.purchase_date }}</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">購入商品</th>
+          <td class="p-4">
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr class="bg-gray-100 border-b">
+                    <th class="p-2 text-left">商品名</th>
+                    <th class="p-2 text-left">色</th>
+                    <th class="p-2 text-left">メーカー</th>
+                    <th class="p-2 text-left">単価</th>
+                    <th class="p-2 text-left">数量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in purchase.purchasedetail_set.all %}
+                  <tr class="border-b border-gray-200">
+                    <td class="p-2">{{ item.item.name }}</td>
+                    <td class="p-2">{{ item.item.color }}</td>
+                    <td class="p-2">{{ item.item.manufacturer }}</td>
+                    <td class="p-2">{{ item.item.price }}</td>
+                    <td class="p-2">{{ item.amount }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">配送先</th>
+          <td class="p-4">{{ purchase.address }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="p-4 text-center">
+            <form
+              action="{% url 'shopping:purchase_cancel' purchase.id %}"
+              method="post"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                キャンセルする
+              </button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
     </table>
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+  </div>
+  <div class="mt-4">
+    <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+      >商品検索</a
+    >へ<br />
+  </div>
+</div>
+
+{% endblock %}

@@ -13,7 +13,6 @@ def register_user(request):
     
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
-        message = "入力した内容を再度確認してください"
         if register_form.is_valid():
             user_id = register_form.cleaned_data.get('id') 
             password1 = register_form.cleaned_data.get('password1')

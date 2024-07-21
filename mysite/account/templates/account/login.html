@@ -1,29 +1,51 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員ログイン</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "account/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h3>ログインしてください。</h3>
-    <br />
-    <form action="{% url 'account:login' %}" method="POST">
-      {% csrf_token %}
-      <table>
-        {{ login_form }}
-        <tr>
-          <td colspan="2"><input type="submit" value="ログイン" /></td>
-        </tr>
-      </table>
-      {% if message %}
-      <div>{{ message }}</div>
-      {% endif %}
-    </form>
-    <a href="{% url 'account:register_user' %}">会員登録</a><br />
-  </body>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}会員ログイン{% endblock %}<br />
+{% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <div class="mb-8 text-center">
+    <h1 class="my-3 text-4xl font-bold">ログイン</h1>
+  </div>
+
+  {% if message %}
+  <div class="text-red-500 mb-4">{{ message }}</div>
+  {% endif %}
+
+  <form action="{% url 'account:login' %}" method="POST" class="space-y-12">
+    {% csrf_token %}
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >{{ login_form.id.label }}</label
+        >
+        {{ login_form.id }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >{{ login_form.password.label }}</label
+        >
+        {{ login_form.password }}
+      </div>
+    </div>
+    <div class="space-y-2">
+      <div>
+        <input
+          type="submit"
+          class="w-full px-8 py-3 font-semibold rounded-md bg-blue-500 hover:bg-blue-700 text-white"
+          value="ログイン"
+        />
+      </div>
+      <p class="px-6 text-sm text-center text-gray-600">
+        まだ会員登録がお済みでない方は
+        <a
+          rel="noopener noreferrer"
+          href="{% url 'account:register_user' %}"
+          class="hover:underline text-blue-500"
+          >会員登録</a
+        >.
+      </p>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

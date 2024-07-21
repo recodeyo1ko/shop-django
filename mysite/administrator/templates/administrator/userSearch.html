@@ -1,38 +1,47 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員IDの検索結果</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>会員IDの検索結果</h3>
-    <br />
-    <table>
-      <tr>
-        <th>会員ID</th>
-        <th>名前</th>
-        <th>住所</th>
-        <th></th>
-      </tr>
-      {% for user in users %}
-      <tr>
-        <td>{{ user.user_id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.address }}</td>
-        <td>
-          <a href="{% url 'administrator:update_user' user.user_id %}">変更</a>
-          <a href="{% url 'administrator:delete_user' user.user_id %}">削除</a>
-        </td>
-      </tr>
-      {% endfor %}
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}会員IDの検索結果{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">会員IDの検索結果</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-gray-100 border-b">
+          <th class="p-4 text-left">会員ID</th>
+          <th class="p-4 text-left">名前</th>
+          <th class="p-4 text-left">住所</th>
+          <th class="p-4 text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="border-b border-gray-200">
+          <td class="p-4">{{ user.user_id }}</td>
+          <td class="p-4">{{ user.name }}</td>
+          <td class="p-4">{{ user.address }}</td>
+          <td class="p-4">
+            <a
+              href="{% url 'administrator:update_user' user.user_id %}"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+              >変更</a
+            >
+            <a
+              href="{% url 'administrator:delete_user' user.user_id %}"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >削除</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    <br />
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
-  </body>
-</html>
+  </div>
+  <div class="mt-4">
+    <a
+      href="{% url 'administrator:top' %}"
+      class="text-blue-500 hover:underline"
+      >管理者メインページ</a
+    >へ
+  </div>
+</div>
+{% endblock %}

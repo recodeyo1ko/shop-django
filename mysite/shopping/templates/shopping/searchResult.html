@@ -1,55 +1,75 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>検索結果</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "shopping/css/style.css" %}'
-    />
-  </head>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}検索結果{% endblock %}<br />
+{% block content %}
 
-  <body>
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h2 class="mb-4 text-2xl font-semibold leading-tight">商品一覧</h2>
+  <div class="overflow-x-auto">
     <h3>キーワード "{{keyword}}" カテゴリ "{{category_name}}" の検索結果</h3>
     <br />
-    <table>
-      <tr>
-        <th>商品名</th>
-        <th>商品の色</th>
-        <th>メーカー名</th>
-        <th>価格</th>
-      </tr>
-      {%for item in items%}
-      <tr>
-        <td>
-          <a href="{% url 'shopping:item_detail' item.item_id %}">
-            {{item.name}}
-          </a>
-          <sup>{{item.recommended}}</sup>
-        </td>
-        <td>{{item.color}}</td>
-        <td>{{item.manufacturer}}</td>
-        <td>{{item.price}}円</td>
-      </tr>
-      {% endfor %}
-    </table>
     {% if message %}
     <div>{{ message }}</div>
     {% endif %}
-    <br />
-    <a href="/">商品検索</a>へ
-    <br />
-  </body>
+    <table class="min-w-full">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <thead class="dark:bg-gray-300">
+        <tr class="text-left">
+          <th class="p-3">商品名</th>
+          <th class="p-3">商品の色</th>
+          <th class="p-3">メーカー名</th>
+          <th class="p-3">価格</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for item in items%}
+        <tr
+          class="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50"
+        >
+          <td class="p-3">
+            <p>
+              <a
+                href="{% url 'shopping:item_detail' item.item_id %}"
+                class="underline"
+              >
+                {{item.name}}
+              </a>
+              <sup>{{item.recommended}}</sup>
+            </p>
+          </td>
+          <td class="p-3">
+            <p>{{item.color}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{item.manufacturer}}</p>
+          </td>
+          <td class="p-3">
+            <p>{{item.price}}円</p>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-  <script>
-    rec = document.getElementsByTagName("sup");
-    for (i = 0; i < rec.length; i++) {
+<br />
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rec = document.getElementsByTagName("sup");
+    for (let i = 0; i < rec.length; i++) {
       if (rec[i].innerText === "True") {
         rec[i].innerText = "オススメ!";
+        rec[i].classList.add("text-red-500");
       } else {
         rec[i].innerText = null;
       }
     }
-  </script>
-</html>
+  });
+</script>
+{% endblock %}

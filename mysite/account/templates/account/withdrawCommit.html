@@ -1,19 +1,14 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>退会完了</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "account/css/style.css" %}'
-    />
-  </head>
-  <body>
-    {% if user_name_cashe %}
-    <h3>{{ user_name_cashe }}さん、退会処理を完了しました。</h3>
-    {% endif %}
-    <h3>またのご利用をお待ちしております。</h3>
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}退会完了{% endblock %}<br />
+{% block content %} {% if user_name_cashe %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    {{ user_name_cache }}さん、退会処理を完了しました。
+  </h3>
+  <h3 class="mb-6 text-xl">またのご利用をお待ちしております。</h3>
+  <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+    >商品検索</a
+  >へ<br />
+</div>
+
+{% endblock %}

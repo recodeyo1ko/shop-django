@@ -1,40 +1,47 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員情報の確認</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "account/css/style.css" %}'
-    />
-  </head>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}会員情報の確認{% endblock %}<br />
+{% block content %}
 
-  <body>
-    <h3>会員情報</h3>
-    <br />
-    <table>
-      <tr>
-        <th>会員ID</th>
-        <td>{{ user.user_id }}</td>
-      </tr>
-      <tr>
-        <th>パスワード</th>
-        <td>表示なし</td>
-      </tr>
-      <tr>
-        <th>お名前</th>
-        <td>{{ user.name }}</td>
-      </tr>
-      <tr>
-        <th>ご住所</th>
-        <td>{{ user.address }}</td>
-      </tr>
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">会員情報</h3>
+  <div class="overflow-x-auto mb-6">
+    <table class="min-w-full bg-white border border-gray-200">
+      <colgroup>
+        <col class="w-1/3" />
+        <col class="w-2/3" />
+      </colgroup>
+      <tbody>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">会員ID</th>
+          <td class="p-4">{{ user.user_id }}</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">パスワード</th>
+          <td class="p-4">表示なし</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">お名前</th>
+          <td class="p-4">{{ user.name }}</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">ご住所</th>
+          <td class="p-4">{{ user.address }}</td>
+        </tr>
+      </tbody>
     </table>
-    <br />
-    <a href="{% url 'account:update_user' %}">会員情報の変更</a>
-    <br />
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-    <br />
-  </body>
-</html>
+  </div>
+  <div class="mt-4">
+    <a
+      href="{% url 'account:update_user' %}"
+      class="text-blue-500 hover:underline"
+      >会員情報の変更</a
+    >
+  </div>
+  <div class="mt-4">
+    <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+      >商品検索</a
+    >へ
+  </div>
+</div>
+
+{% endblock %}

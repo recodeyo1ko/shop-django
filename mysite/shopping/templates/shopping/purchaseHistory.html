@@ -1,64 +1,77 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>購入履歴</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>購入履歴の一覧</h3>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}購入履歴{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">購入履歴の一覧</h3>
 
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
-    <table>
-      <tr>
-        <th>注文日</th>
-        <th>購入商品</th>
-        <th>配送先</th>
-        <th></th>
-      </tr>
-      {% for purchase in purchases %}
-      <tr>
-        <td>{{ purchase.purchase_date }}</td>
-        <td>
-          <table>
-            <tr>
-              <th>商品名</th>
-              <th>色</th>
-              <th>メーカー</th>
-              <th>単価</th>
-              <th>数量</th>
-            </tr>
-            {% for item in purchase.purchasedetail_set.all %}
-            <tr>
-              <td>{{ item.item.name }}</td>
-              <td>{{ item.item.color }}</td>
-              <td>{{ item.item.manufacturer }}</td>
-              <td>{{ item.item.price }}</td>
-              <td>{{ item.amount }}</td>
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-        <td>{{purchase.address }}</td>
-        <td>
-          <a href="{% url 'shopping:purchase_cancel' purchase.id %}"
-            >キャンセル</a
-          >
-        </td>
-      </tr>
+  {% if message %}
+  <p class="text-red-500">{{ message }}</p>
+  {% endif %}
 
-      {% endfor %}
+  <div class="overflow-x-auto mb-6">
+    <table class="min-w-full bg-white border border-gray-200 mb-6">
+      <thead>
+        <tr class="bg-gray-100 border-b">
+          <th class="p-4 text-left">注文日</th>
+          <th class="p-4 text-left">購入商品</th>
+          <th class="p-4 text-left">配送先</th>
+          <th class="p-4 text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+        <tr class="border-b border-gray-200">
+          <td class="p-4">{{ purchase.purchase_date }}</td>
+          <td class="p-4">
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr class="bg-gray-100 border-b">
+                    <th class="p-2 text-left">商品名</th>
+                    <th class="p-2 text-left">色</th>
+                    <th class="p-2 text-left">メーカー</th>
+                    <th class="p-2 text-left">単価</th>
+                    <th class="p-2 text-left">数量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in purchase.purchasedetail_set.all %}
+                  <tr class="border-b border-gray-200">
+                    <td class="p-2">{{ item.item.name }}</td>
+                    <td class="p-2">{{ item.item.color }}</td>
+                    <td class="p-2">{{ item.item.manufacturer }}</td>
+                    <td class="p-2">{{ item.item.price }}</td>
+                    <td class="p-2">{{ item.amount }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <td class="p-4">{{ purchase.address }}</td>
+          <td class="p-4">
+            <a
+              href="{% url 'shopping:purchase_cancel' purchase.id %}"
+              class="text-red-500 hover:underline"
+              >キャンセル</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 
-    <a href="{% url 'shopping:cart' %}">カートに戻る</a>
-    <br />
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+  <div class="mt-4">
+    <a href="{% url 'shopping:cart' %}" class="text-blue-500 hover:underline"
+      >カートに戻る</a
+    >
+    <a
+      href="{% url 'shopping:index' %}"
+      class="text-blue-500 hover:underline ml-4"
+      >商品検索</a
+    >
+  </div>
+</div>
+
+{% endblock %}

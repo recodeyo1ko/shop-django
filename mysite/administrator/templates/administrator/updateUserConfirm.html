@@ -1,45 +1,59 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員情報の更新確認</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>以下の会員情報で更新しますか？</h3>
-    <br />
-    <form
-      method="POST"
-      action="{% url 'administrator:update_user_commit' user.user_id %}"
-    >
-      {% csrf_token %}
-      <table>
-        <tr>
-          <th>会員ID</th>
-          <td>{{ user.user_id }}</td>
-        </tr>
-        <tr>
-          <th>パスワード</th>
-          <td>********</td>
-        </tr>
-        <tr>
-          <th>お名前</th>
-          <td>{{ user.name }}</td>
-        </tr>
-        <tr>
-          <th>ご住所</th>
-          <td>{{ user.address }}</td>
-        </tr>
-        <tr>
-          <td colspan="2"><input type="submit" value="変更" /></td>
-        </tr>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}会員情報の更新確認{% endblock %}<br />
+{% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の会員情報で更新しますか？
+  </h3>
+  <form
+    method="POST"
+    action="{% url 'administrator:update_user_commit' user.user_id %}"
+  >
+    {% csrf_token %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200">
+        <colgroup>
+          <col class="w-1/3" />
+          <col class="w-2/3" />
+        </colgroup>
+        <tbody>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">会員ID</th>
+            <td class="p-4">{{ user.user_id }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">パスワード</th>
+            <td class="p-4">********</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">お名前</th>
+            <td class="p-4">{{ user.name }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">ご住所</th>
+            <td class="p-4">{{ user.address }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="p-4 text-center">
+              <input
+                type="submit"
+                value="変更"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              />
+            </td>
+          </tr>
+        </tbody>
       </table>
-    </form>
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
-  </body>
-</html>
+    </div>
+  </form>
+  <div class="mt-4">
+    <a
+      href="{% url 'administrator:top' %}"
+      class="text-blue-500 hover:underline"
+      >管理者メインページ</a
+    >へ
+  </div>
+</div>
+
+{% endblock %}

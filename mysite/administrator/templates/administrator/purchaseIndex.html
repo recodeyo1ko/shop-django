@@ -1,60 +1,70 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>購入履歴一覧</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>購入履歴の一覧</h3>
-    <br />
-    <table>
-      <tr>
-        <th>購入者ID</th>
-        <th>注文日</th>
-        <th>購入商品</th>
-        <th>配送先</th>
-        <th></th>
-      </tr>
-      {% for purchase in purchases %}
-      <tr>
-        <td>{{ purchase.user.user_id }}</td>
-        <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
-        <td>
-          <table>
-            <tr>
-              <th>商品名</th>
-              <th>色</th>
-              <th>メーカー</th>
-              <th>単価</th>
-              <th>数量</th>
-            </tr>
-            {% for detail in purchase.purchasedetail_set.all %}
-            <tr>
-              <td>{{ detail.item.name }}</td>
-              <td>{{ detail.item.color }}</td>
-              <td>{{ detail.item.manufacturer }}</td>
-              <td>{{ detail.item.price }}円</td>
-              <td>{{ detail.amount }} 個</td>
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-        <td>{{ purchase.address }}</td>
-        <td>
-          <a href="{% url 'administrator:delete_purchase' purchase.id %}">
-            キャンセル
-          </a>
-        </td>
-      </tr>
-      {% endfor %}
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}購入履歴一覧{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">購入履歴の一覧</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200 mb-6">
+      <thead>
+        <tr class="bg-gray-100 border-b">
+          <th class="p-4 text-left">購入者ID</th>
+          <th class="p-4 text-left">注文日</th>
+          <th class="p-4 text-left">購入商品</th>
+          <th class="p-4 text-left">配送先</th>
+          <th class="p-4 text-left"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+        <tr class="border-b border-gray-200">
+          <td class="p-4">{{ purchase.user.user_id }}</td>
+          <td class="p-4">{{ purchase.purchase_date|date:"Y/m/d" }}</td>
+          <td class="p-4">
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr class="bg-gray-100 border-b">
+                    <th class="p-2 text-left">商品名</th>
+                    <th class="p-2 text-left">色</th>
+                    <th class="p-2 text-left">メーカー</th>
+                    <th class="p-2 text-left">単価</th>
+                    <th class="p-2 text-left">数量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for detail in purchase.purchasedetail_set.all %}
+                  <tr class="border-b border-gray-200">
+                    <td class="p-2">{{ detail.item.name }}</td>
+                    <td class="p-2">{{ detail.item.color }}</td>
+                    <td class="p-2">{{ detail.item.manufacturer }}</td>
+                    <td class="p-2">{{ detail.item.price }}円</td>
+                    <td class="p-2">{{ detail.amount }} 個</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <td class="p-4">{{ purchase.address }}</td>
+          <td class="p-4">
+            <a
+              href="{% url 'administrator:delete_purchase' purchase.id %}"
+              class="text-red-500 hover:underline"
+              >キャンセル</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    <br /><br />
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
-  </body>
-</html>
+  </div>
+  <div class="mt-4">
+    <a
+      href="{% url 'administrator:top' %}"
+      class="text-blue-500 hover:underline"
+      >管理者メインページ</a
+    >へ
+  </div>
+</div>
+
+{% endblock %}

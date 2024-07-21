@@ -1,69 +1,96 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>商品の検索結果</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "administrator/css/style.css" %}'
-    />
-  </head>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}検索結果{% endblock %}<br />
+{% block content %}
 
-  <body>
+<div class="container p-2 mx-auto sm:p-4 dark:text-gray-800">
+  <h2 class="mb-4 text-2xl font-semibold leading-tight">商品一覧</h2>
+  <div class="overflow-x-auto">
     {% if category_name and keyword %}
-    <h3>カテゴリ "{{category_name}}" とキーワード "{{keyword}}" の検索結果</h3>
+    <h3 class="mb-4">
+      カテゴリ "{{ category_name }}" とキーワード "{{ keyword }}" の検索結果
+    </h3>
     {% elif category_name %}
-    <h3>カテゴリ "{{category_name}}" の検索結果</h3>
+    <h3 class="mb-4">カテゴリ "{{ category_name }}" の検索結果</h3>
     {% elif keyword %}
-    <h3>キーワード "{{keyword}}" の検索結果</h3>
+    <h3 class="mb-4">キーワード "{{ keyword }}" の検索結果</h3>
+    {% endif %} {% if message %}
+    <div class="mb-4 text-red-500">{{ message }}</div>
     {% endif %}
-
-    <br />
-    <table>
-      <tr>
-        <th>商品名</th>
-        <th>商品カテゴリ</th>
-        <th>商品の色</th>
-        <th>メーカー名</th>
-        <th>価格</th>
-        <th>在庫数</th>
-        <th></th>
-      </tr>
-      {%for item in items%}
-      <tr>
-        <td>
-          {{ item.name }}
-          <sup>{{item.recommended}}</sup>
-        </td>
-        <td>{{item.category}}</td>
-        <td>{{item.color}}</td>
-        <td>{{item.manufacturer}}</td>
-        <td>{{item.price}}円</td>
-        <td>{{item.stock}}</td>
-        <td>
-          <a href="{% url 'administrator:update_item' item.item_id %}">変更</a>
-          <a href="{% url 'administrator:delete_item' item.item_id %}"> 削除</a>
-        </td>
-      </tr>
-      {% endfor %}
+    <table class="min-w-full bg-white border border-gray-200">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <thead class="bg-gray-100">
+        <tr class="text-left">
+          <th class="p-3">商品名</th>
+          <th class="p-3">商品カテゴリ</th>
+          <th class="p-3">商品の色</th>
+          <th class="p-3">メーカー名</th>
+          <th class="p-3">価格</th>
+          <th class="p-3">在庫数</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr
+          class="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50"
+        >
+          <td class="p-3">
+            {{ item.name }}
+            <sup>{{ item.recommended }}</sup>
+          </td>
+          <td class="p-3">{{ item.category }}</td>
+          <td class="p-3">{{ item.color }}</td>
+          <td class="p-3">{{ item.manufacturer }}</td>
+          <td class="p-3">{{ item.price }}円</td>
+          <td class="p-3">{{ item.stock }}</td>
+          <td class="p-3">
+            <a
+              href="{% url 'administrator:update_item' item.item_id %}"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+              >変更</a
+            >
+            <a
+              href="{% url 'administrator:delete_item' item.item_id %}"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >削除</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    {% if message %}
-    <div>{{ message }}</div>
-    {% endif %}
 
-    <a href="{% url 'administrator:register_item' %}">商品の新規登録</a>へ<br />
-    <a href="{% url 'administrator:top' %}"> 管理者メインページ</a>へ<br />
-  </body>
-
-  <script>
-    rec = document.getElementsByTagName("sup");
-    for (i = 0; i < rec.length; i++) {
+    <div class="mt-4">
+      <a
+        href="{% url 'administrator:register_item' %}"
+        class="text-blue-500 hover:underline"
+        >商品の新規登録</a
+      >へ<br />
+      <a
+        href="{% url 'administrator:top' %}"
+        class="text-blue-500 hover:underline"
+        >管理者メインページ</a
+      >へ<br />
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const rec = document.getElementsByTagName("sup");
+    for (let i = 0; i < rec.length; i++) {
       if (rec[i].innerText === "True") {
         rec[i].innerText = "オススメ!";
+        rec[i].classList.add("text-red-500");
       } else {
         rec[i].innerText = null;
       }
     }
-  </script>
-</html>
+  });
+</script>
+{% endblock %}
