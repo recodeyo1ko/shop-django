@@ -26,6 +26,7 @@ def admin_login(request):
         login_form = forms.AdminLoginForm(request.POST) 
         message = '入力した内容を再度確認してください'
         if login_form.is_valid():
+            request.session.flush()
             admin_id = login_form.cleaned_data.get('admin_id')
             password = login_form.cleaned_data.get('password')
             try:
@@ -79,7 +80,9 @@ def item_search(request):
         else:
             message = '見つかりませんでした'
             return render(request, 'administrator/main.html', locals())
-    return redirect('administrator:top')
+    else:
+        items = Item.objects.all()
+        return render(request, 'administrator/itemSearch.html', locals())
 
 
 @is_admin_login

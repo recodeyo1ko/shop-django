@@ -47,6 +47,7 @@
             :class="{'flex': open, 'hidden': !open}"
             class="flex-col items-center flex-grow hidden pb-4 border-blue-600 md:pb-0 md:flex md:justify-end md:flex-row lg:border-l-2 lg:pl-2"
           >
+            {% if not request.session.admin_is_login %}
             <a
               class="px-4 py-2 mt-2 text-sm text-gray-500 md:mt-0 hover:text-blue-600 focus:outline-none focus:shadow-outline"
               href="{% url 'shopping:search' %}"
@@ -68,6 +69,31 @@
               href="{% url 'shopping:cart' %}"
               >カート</a
             >
+            {% endif %} {% else %}
+
+            <div class="text-red-500">管理者としてログイン中</div>
+            <a
+              class="px-4 py-2 mt-2 text-sm text-gray-500 md:mt-0 hover:text-blue-600 focus:outline-none focus:shadow-outline"
+              href="{% url 'administrator:top' %}"
+              >管理者トップ</a
+            >
+
+            <a
+              class="px-4 py-2 mt-2 text-sm text-gray-500 md:mt-0 hover:text-blue-600 focus:outline-none focus:shadow-outline"
+              href="{% url 'administrator:item_search' %}"
+              >商品一覧</a
+            >
+            <a
+              class="px-4 py-2 mt-2 text-sm text-gray-500 md:mt-0 hover:text-blue-600 focus:outline-none focus:shadow-outline"
+              href="{% url 'administrator:purchase_index' %}"
+              >購入履歴一覧</a
+            >
+            <a
+              class="px-4 py-2 mt-2 text-sm text-gray-500 md:mt-0 hover:text-blue-600 focus:outline-none focus:shadow-outline"
+              href="{% url 'administrator:user_search' %}"
+              >会員一覧</a
+            >
+
             {% endif %}
 
             <div class="inline-flex items-center gap-2 list-none lg:ml-auto">
