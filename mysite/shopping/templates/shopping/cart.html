@@ -1,82 +1,129 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ショッピングカート</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "shopping/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h3>ショッピングカート内の商品一覧</h3>
-    <br />
-    <table>
-      <tr>
-        <th>商品名</th>
-        <th>商品の色</th>
-        <th>メーカー名</th>
-        <th>単価</th>
-        <th>数量</th>
-        <th>削除</th>
-      </tr>
-      {% for cart_item in cart_items %}
-      <tr>
-        <td>{{ cart_item.item.name }}</td>
-        <td>{{ cart_item.item.color }}</td>
-        <td>{{ cart_item.item.manufacturer }}</td>
-        <td>{{ cart_item.item.price }}円</td>
-        <td>
-          <form
-            method="POST"
-            action="{% url 'shopping:amount_in_cart' cart_item.item_id %}"
-          >
-            {% csrf_token %}
-            <input
-              type="hidden"
-              name="itemId"
-              value="{{ cart_item.item_id }}"
-            />
-            <input
-              type="number"
-              name="amount"
-              value="{{ cart_item.amount }}"
-              min="1"
-              max="{{ cart_item.item.stock }}"
-            />
-            <button type="submit">更新</button>
-          </form>
-        </td>
-        <td>
-          <form
-            action="{% url 'shopping:remove_from_cart' cart_item.item_id %}"
-            method="POST"
-            style="display: inline"
-          >
-            {% csrf_token %}
-            <input
-              type="hidden"
-              name="item_id"
-              value="{{ cart_item.item_id }}"
-            />
-            <button type="submit">削除</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}ショッピングカート{% endblock %}<br />
+{% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h2 class="mb-4 text-2xl font-semibold leading-tight">
+    ショッピングカート内の商品一覧
+  </h2>
+  {% if message %} {{ message }}<br />
+  {% endif %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <thead class="dark:bg-gray-300">
+        <tr class="text-left">
+          <th class="p-3">商品名</th>
+          <th class="p-3">商品の色</th>
+          <th class="p-3">メーカー名</th>
+          <th class="p-3">単価</th>
+          <th class="p-3">数量</th>
+          <th class="p-3">削除</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cart_item in cart_items %}
+        <tr
+          class="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50"
+        >
+          <td class="p-3">
+            <p>{{ cart_item.item.name }}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ cart_item.item.color }}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ cart_item.item.manufacturer }}</p>
+          </td>
+          <td class="p-3">
+            <p>{{ cart_item.item.price }}円</p>
+          </td>
+          <td class="p-3">
+            <form
+              method="POST"
+              action="{% url 'shopping:amount_in_cart' cart_item.item_id %}"
+              style="display: inline"
+            >
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="itemId"
+                value="{{ cart_item.item_id }}"
+              />
+              <input
+                type="number"
+                name="amount"
+                value="{{ cart_item.amount }}"
+                min="1"
+                max="{{ cart_item.item.stock }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block p-2.5 inline w-20"
+                placeholder="90210"
+              />
+
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                更新
+              </button>
+            </form>
+          </td>
+          <td class="p-3">
+            <form
+              action="{% url 'shopping:remove_from_cart' cart_item.item_id %}"
+              method="POST"
+              style="display: inline"
+            >
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="item_id"
+                value="{{ cart_item.item_id }}"
+              />
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                削除
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
     <form action="{% url 'shopping:remove_from_all_cart' %}" method="POST">
       {% csrf_token %}
-      <button type="submit">カートを空にする</button>
+      <button
+        type="submit"
+        class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      >
+        カートを空にする
+      </button>
     </form>
-    {% if total_price %} 合計 {{ total_price }} 円<br />
+    {% if total_price %}
+    <div
+      class="mt-4 dark:bg-gray-300 dark:text-gray-800 p-3 rounded-md md:w-1/4 text-center"
+    >
+      合計 {{ total_price }} 円<br />
+    </div>
     <form action="{% url 'shopping:purchase' %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="購入する" />
+      <input
+        type="submit"
+        value="購入する"
+        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      />
     </form>
     <br />
-    {% endif %} {% if message %} {{ message }}<br />
-    {% endif %} <a href="/">商品検索</a>へ<br />
-  </body>
-</html>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,26 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>カートを空にする</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h1>カートを空にする</h1>
-    <p>本当にカート内のすべての商品を削除しますか？</p>
-    <form
-      method="POST"
-      action="{% url 'shopping:remove_from_all_cart_commit' %}"
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}カートを空にする{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h1 class="mb-6 text-3xl font-semibold leading-tight">カートを空にする</h1>
+  <p class="mb-4 text-lg text-gray-700">
+    本当にカート内のすべての商品を削除しますか？
+  </p>
+  <form method="POST" action="{% url 'shopping:remove_from_all_cart_commit' %}">
+    {% csrf_token %}
+    <button
+      type="submit"
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
     >
-      {% csrf_token %}
-      <button type="submit">はい、削除します</button>
-    </form>
-    <br />
-    <a href="{% url 'shopping:cart' %}">カートに戻る</a>
-  </body>
-</html>
+      はい、削除します
+    </button>
+  </form>
+  <br />
+  <a href="{% url 'shopping:cart' %}" class="text-blue-500 hover:underline"
+    >カートに戻る</a
+  >
+</div>
+
+{% endblock %}

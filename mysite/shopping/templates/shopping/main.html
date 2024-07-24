@@ -1,43 +1,37 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>商品検索</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "account/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h3>商品の検索を行います。</h3>
-    <br />
-    <form action="/shopping/search/" method="GET">
-      {{ search_form }} <input type="submit" value="検索" /><br />
-    </form>
-    <a href="{% url 'shopping:cart' %}">ショッピングカート</a><br />
-    <a href="{% url 'shopping:purchase_history' %}">購入履歴</a><br />
-    <div id="loginBtnDiv">
-      <a href="{% url 'account:login' %}">ログイン</a><br />
-    </div>
-    <div id="infoDiv" style="display: none">
-      <h6>ようこそ{{ request.session.user_name }}さん</h6>
-      <a href="{% url 'account:user_info' %}">会員情報の確認</a><br />
-      <a href="{% url 'account:update_user' %}">会員情報の変更</a><br />
-      <a href="{% url 'account:logout' %}">ログアウト</a><br />
-    </div>
-    {% if message %} {{ message }}<br />
-    {% endif %}
-    <a href="{% url 'administrator:top' %}">管理者ページ</a><br />
-  </body>
-  <script>
-    var isLogin = "{{ request.session.is_login }}";
-    if (isLogin === "True") {
-      document.getElementById("infoDiv").style.display = "block";
-      document.getElementById("loginBtnDiv").style.display = "none";
-    } else {
-      document.getElementById("infoDiv").style.display = "none";
-      document.getElementById("loginBtnDiv").style.display = "block";
-    }
-  </script>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}商品検索{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    商品の検索を行います。
+  </h3>
+  <form action="/shopping/search/" method="GET" class="mb-6">
+    {{ search_form }}
+    <input
+      type="submit"
+      value="検索"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+    /><br />
+  </form>
+  <div id="infoDiv" class="hidden">
+    <h6 class="mb-2">ようこそ{{ request.session.user_name }}さん</h6>
+    <a
+      href="{% url 'account:user_info' %}"
+      class="text-blue-500 hover:underline"
+      >会員情報の確認</a
+    ><br />
+    <a
+      href="{% url 'account:update_user' %}"
+      class="text-blue-500 hover:underline"
+      >会員情報の変更</a
+    ><br />
+  </div>
+</div>
+
+<script>
+  if ("{{ request.session.user_id }}" != "") {
+    document.getElementById("infoDiv").classList.remove("hidden");
+  }
+</script>
+
+{% endblock %}

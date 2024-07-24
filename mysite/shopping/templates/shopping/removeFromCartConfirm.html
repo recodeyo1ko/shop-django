@@ -1,35 +1,46 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>ショッピングカート内の商品を削除</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}カート内の商品の削除確認{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の商品をショッピングカートから削除してよろしいですか？
+  </h3>
+  {% if message %}
+  <p class="text-red-500 mb-4">{{ message }}</p>
+  {% endif %}
+  <div class="mb-4">
+    <p class="text-lg"><strong>商品名:</strong> {{ item_in_cart.item.name }}</p>
+    <p class="text-lg">
+      <strong>メーカー名:</strong> {{ item_in_cart.item.manufacturer }}
+    </p>
+    <p class="text-lg">
+      <strong>単価:</strong> {{ item_in_cart.item.price }}円
+    </p>
+    <p class="text-lg"><strong>数量:</strong> {{ item_in_cart.amount }}個</p>
+  </div>
+  <form
+    method="POST"
+    action="{% url 'shopping:remove_from_cart_commit' item_in_cart.item.item_id %}"
+    class="mb-4"
+  >
+    {% csrf_token %}
+    <input
+      type="hidden"
+      name="item_id"
+      value="{{ item_in_cart.item.item_id }}"
     />
-  </head>
-  <body>
-    <h3>以下の商品をショッピングカートから削除してよろしいですか？</h3>
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %} 商品名: {{ item_in_cart.item.name }} <br />
-    メーカー名: {{ item_in_cart.item.manufacturer }}<br />
-    単価: {{ item_in_cart.item.price }}円<br />
-    数量: {{ item_in_cart.amount }}個<br />
-    <form
-      method="POST"
-      action="{% url 'shopping:remove_from_cart_commit' item_in_cart.item.item_id %}"
+    <button
+      type="submit"
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
     >
-      {% csrf_token %}
-      <input
-        type="hidden"
-        name="item_id"
-        value="{{ item_in_cart.item.item_id }}"
-      />
-      <button type="submit">削除する</button>
-    </form>
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-</html>
+      削除する
+    </button>
+  </form>
+  <div class="mt-4">
+    <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+      >商品検索</a
+    >へ
+  </div>
+</div>
+
+{% endblock %}

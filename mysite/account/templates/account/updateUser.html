@@ -1,45 +1,60 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>会員情報</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "account/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h3>会員情報</h3>
-    <br />
-    <form action="{% url 'account:update_user' %}" method="POST">
-      {% csrf_token %}
-      <table>
-        {{ register_form }}
-        <tr>
-          <td colspan="2"><input type="submit" value="変更" /></td>
-        </tr>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}会員情報{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">会員情報</h3>
+  <form action="{% url 'account:update_user' %}" method="POST" class="mb-6">
+    {% csrf_token %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200">
+        <tbody>
+          {{ register_form }}
+          <tr>
+            <td colspan="2" class="p-4 text-center">
+              <input
+                type="submit"
+                value="変更"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              />
+            </td>
+          </tr>
+        </tbody>
       </table>
-      {% if register_form.captcha.errors %}
-      <div>{{ register_form.captcha.errors }}</div>
-      {% elif message %}
-      <div>{{ message }}</div>
-      {% endif %}
-    </form>
-    <a href="{% url 'account:withdraw' %}">退会する</a><br />
-    <a href="{% url 'shopping:purchase_history' %}">購入履歴</a>へ<br />
-    <a href="{% url 'shopping:index' %}">商品検索</a>へ<br />
-  </body>
-  <script>
-    initial = "{{ initial }}";
+    </div>
+    {% if register_form.captcha.errors %}
+    <div class="text-red-500 mt-4">{{ register_form.captcha.errors }}</div>
+    {% elif message %}
+    <div class="text-green-500 mt-4">{{ message }}</div>
+    {% endif %}
+  </form>
+  <div class="mt-4">
+    <a href="{% url 'account:withdraw' %}" class="text-red-500 hover:underline"
+      >退会する</a
+    ><br />
+    <a
+      href="{% url 'shopping:purchase_history' %}"
+      class="text-blue-500 hover:underline"
+      >購入履歴</a
+    >へ<br />
+    <a href="{% url 'shopping:index' %}" class="text-blue-500 hover:underline"
+      >商品検索</a
+    >へ<br />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var initial = "{{ initial }}";
     if (initial === "True") {
-      id = "{{ id }}";
-      name = "{{ name }}";
-      address = "{{ address }}";
+      var id = "{{ id }}";
+      var name = "{{ name }}";
+      var address = "{{ address }}";
       document.getElementById("id_id").value = id;
       document.getElementById("id_name").value = name;
       document.getElementById("id_address").value = address;
     }
     document.getElementById("id_id").readOnly = true;
-  </script>
-</html>
+  });
+</script>
+
+{% endblock %}

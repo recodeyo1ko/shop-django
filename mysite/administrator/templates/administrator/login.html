@@ -1,23 +1,46 @@
-{% load static %}
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>管理者ログイン</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href='{% static "administrator/css/style.css" %}'
-    />
-  </head>
-  <body>
-    <h2>管理者ログイン</h2>
-    <form method="POST" action="{% url 'administrator:admin_login' %}">
-      {% csrf_token %} {{ login_form.as_p }}
-      <button type="submit">ログイン</button>
-    </form>
-    {% if message %}
-    <p style="color: red">{{ message }}</p>
-    {% endif %}
-    <a href="/">商品検索</a>へ
-  </body>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}管理者ログイン{% endblock %}<br />
+{% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <div class="mb-8 text-center">
+    <h1 class="my-3 text-4xl font-bold">管理者ログイン</h1>
+  </div>
+
+  {% if message %}
+  <div class="text-red-500 mb-4">{{ message }}</div>
+  {% endif %}
+
+  <form
+    action="{% url 'administrator:admin_login' %}"
+    method="POST"
+    class="space-y-12"
+  >
+    {% csrf_token %}
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >{{ login_form.admin_id.label }}</label
+        >
+        {{ login_form.admin_id }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >{{ login_form.password.label }}</label
+        >
+        {{ login_form.password }}
+      </div>
+    </div>
+    <div class="space-y-2">
+      <div>
+        <input
+          type="submit"
+          class="w-full px-8 py-3 font-semibold rounded-md bg-blue-500 hover:bg-blue-700 text-white"
+          value="ログイン"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

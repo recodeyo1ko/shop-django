@@ -1,18 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>カートを空にしました</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'shopping/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h1>カートを空にしました</h1>
-    <p>{{ message }}</p>
-    <a href="/shopping/cart/">カートに戻る</a>
-  </body>
-</html>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}カートの初期化完了{% endblock %}<br />
+{% block content %}
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h1 class="mb-6 text-3xl font-semibold leading-tight">
+    カートを空にしました
+  </h1>
+  <p class="mb-4 text-lg text-gray-700">{{ message }}</p>
+  <a href="/shopping/cart/" class="text-blue-500 hover:underline"
+    >カートに戻る</a
+  >
+</div>
+
+{% endblock %}

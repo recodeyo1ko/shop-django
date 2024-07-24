@@ -13,7 +13,6 @@ def register_user(request):
     
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
-        message = "入力した内容を再度確認してください"
         if register_form.is_valid():
             user_id = register_form.cleaned_data.get('id') 
             password1 = register_form.cleaned_data.get('password1')
@@ -41,6 +40,7 @@ def register_user_commit(request):
     if request.method == 'POST':
         register_form = forms.RegisterForm(request.POST) 
         if register_form.is_valid():
+            request.session.flush()
             user_id = register_form.cleaned_data.get('id')
             password1 = register_form.cleaned_data.get('password1') 
             password2 = register_form.cleaned_data.get('password2')
@@ -68,6 +68,7 @@ def login(request):
         login_form = forms.UserForm(request.POST)
         message = '入力した内容を再度確認してください' 
         if login_form.is_valid(): 
+            request.session.flush()
             user_id = login_form.cleaned_data.get('id') 
             password = login_form.cleaned_data.get('password') 
             try: 

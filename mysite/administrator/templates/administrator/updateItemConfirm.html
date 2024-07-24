@@ -1,70 +1,76 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>商品の登録情報変更確認</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>以下の内容で商品の登録情報を変更しますか？</h3>
-    <br />
-    <form
-      action="{% url 'administrator:update_item_commit' item.item_id %}"
-      method="POST"
-    >
-      {% csrf_token %}
-      <table>
-        <tr>
-          <th>商品名</th>
-          <td>{{ item.name }}</td>
-        </tr>
-        <tr>
-          <th>商品の色</th>
-          <td>{{ item.color }}</td>
-        </tr>
-        <tr>
-          <th>メーカー名</th>
-          <td>{{ item.manufacturer }}</td>
-        </tr>
-        <tr>
-          <th>カテゴリ</th>
-          <td>{{ item.category_name }}</td>
-        </tr>
-        <tr>
-          <th>オススメ</th>
-          <td>{{ item.recommended }}</td>
-        </tr>
-        <tr>
-          <th>価格</th>
-          <td>{{ item.price }}円</td>
-        </tr>
-        <tr>
-          <th>在庫数</th>
-          <td>{{ item.stock }}個</td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <input type="submit" value="確定" />
-          </td>
-        </tr>
+{% extends 'base.html' %} {% load static %} {% block title %}
+商品の登録情報変更確認 {% endblock %} {% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の内容で商品の登録情報を変更しますか？
+  </h3>
+  <form
+    action="{% url 'administrator:update_item_commit' item.item_id %}"
+    method="POST"
+  >
+    {% csrf_token %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200">
+        <colgroup>
+          <col class="w-1/3" />
+          <col class="w-2/3" />
+        </colgroup>
+        <tbody>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">商品名</th>
+            <td class="p-4">{{ item.name }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">商品の色</th>
+            <td class="p-4">{{ item.color }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">メーカー名</th>
+            <td class="p-4">{{ item.manufacturer }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">カテゴリ</th>
+            <td class="p-4">{{ item.category_name }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">オススメ</th>
+            <td class="p-4">{{ item.recommended }}</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">価格</th>
+            <td class="p-4">{{ item.price }}円</td>
+          </tr>
+          <tr class="border-b border-gray-200">
+            <th class="p-4 text-left">在庫数</th>
+            <td class="p-4">{{ item.stock }}個</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="p-4 text-center">
+              <input
+                type="submit"
+                value="確定"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              />
+            </td>
+          </tr>
+        </tbody>
       </table>
-      <input type="hidden" name="name" value="{{ item.name }}" />
-      <input type="hidden" name="color" value="{{ item.color }}" />
-      <input
-        type="hidden"
-        name="manufacturer"
-        value="{{ item.manufacturer }}"
-      />
-      <input type="hidden" name="category" value="{{ item.category_id }}" />
-      <input type="hidden" name="recommended" value="{{ item.recommended }}" />
-      <input type="hidden" name="price" value="{{ item.price }}" />
-      <input type="hidden" name="stock" value="{{ item.stock }}" />
-    </form>
-    <a href="{% url 'administrator:update_item' item.item_id %}">戻る</a>
-  </body>
-</html>
+    </div>
+    <input type="hidden" name="name" value="{{ item.name }}" />
+    <input type="hidden" name="color" value="{{ item.color }}" />
+    <input type="hidden" name="manufacturer" value="{{ item.manufacturer }}" />
+    <input type="hidden" name="category" value="{{ item.category_id }}" />
+    <input type="hidden" name="recommended" value="{{ item.recommended }}" />
+    <input type="hidden" name="price" value="{{ item.price }}" />
+    <input type="hidden" name="stock" value="{{ item.stock }}" />
+  </form>
+  <div class="mt-4">
+    <a
+      href="{% url 'administrator:update_item' item.item_id %}"
+      class="text-blue-500 hover:underline"
+      >戻る</a
+    >
+  </div>
+</div>
+{% endblock %}

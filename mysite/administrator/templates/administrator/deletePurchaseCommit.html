@@ -1,56 +1,68 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>注文のキャンセル完了</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'administrator/css/style.css' %}"
-    />
-  </head>
-  <body>
-    <h3>以下の注文をキャンセルしました。</h3>
-    <br />
-    <table>
-      <tr>
-        <th>注文者ID</th>
-        <td>{{ purchase.user_id }}</td>
-      </tr>
-      <tr>
-        <th>注文日</th>
-        <td>{{ purchase.purchase_date|date:"Y/m/d" }}</td>
-      </tr>
-      <tr>
-        <th>購入商品</th>
-        <td>
-          <table>
-            <tr>
-              <th>商品名</th>
-              <th>色</th>
-              <th>メーカー</th>
-              <th>単価</th>
-              <th>数量</th>
-            </tr>
-            {% for detail in purchase_details %}
-            <tr>
-              <td>{{ detail.item__name }}</td>
-              <td>{{ detail.item__color }}</td>
-              <td>{{ detail.item__manufacturer }}</td>
-              <td>{{ detail.item__price }}円</td>
-              <td>{{ detail.amount }}個</td>
-            </tr>
-            {% endfor %}
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <th>配送先</th>
-        <td>{{ purchase.address }}</td>
-      </tr>
+{% extends 'base.html' %}<br />
+{% load static %} {% block title %}注文のキャンセル完了{% endblock %}<br />
+{% block content %}
+
+<div class="container mx-auto max-w-4xl p-4 bg-white rounded shadow-md">
+  <h3 class="mb-6 text-2xl font-semibold leading-tight">
+    以下の注文をキャンセルしました。
+  </h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200 mb-6">
+      <colgroup>
+        <col class="w-1/3" />
+        <col class="w-2/3" />
+      </colgroup>
+      <tbody>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">注文者ID</th>
+          <td class="p-4">{{ purchase.user_id }}</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">注文日</th>
+          <td class="p-4">{{ purchase.purchase_date|date:"Y/m/d" }}</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">購入商品</th>
+          <td class="p-4">
+            <div class="overflow-x-auto">
+              <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr class="bg-gray-100 border-b">
+                    <th class="p-2 text-left">商品名</th>
+                    <th class="p-2 text-left">色</th>
+                    <th class="p-2 text-left">メーカー</th>
+                    <th class="p-2 text-left">単価</th>
+                    <th class="p-2 text-left">数量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for detail in purchase_details %}
+                  <tr class="border-b border-gray-200">
+                    <td class="p-2">{{ detail.item__name }}</td>
+                    <td class="p-2">{{ detail.item__color }}</td>
+                    <td class="p-2">{{ detail.item__manufacturer }}</td>
+                    <td class="p-2">{{ detail.item__price }}円</td>
+                    <td class="p-2">{{ detail.amount }}個</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <th class="p-4 text-left">配送先</th>
+          <td class="p-4">{{ purchase.address }}</td>
+        </tr>
+      </tbody>
     </table>
-    <br />
-    <a href="{% url 'administrator:top' %}">管理者メインページ</a>へ<br />
-  </body>
-</html>
+  </div>
+  <div class="mt-4">
+    <a
+      href="{% url 'administrator:top' %}"
+      class="text-blue-500 hover:underline"
+      >管理者メインページ</a
+    >へ
+  </div>
+</div>
+{% endblock %}

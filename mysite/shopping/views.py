@@ -32,7 +32,11 @@ def search(request):
             else:
                 message = '見つかりませんでした'
                 return render(request, 'shopping/searchResult.html', locals())
-        return redirect('shopping:index')
+        else:
+            keyword = "[未入力]"
+            category_name = "[未入力]"
+            items = models.Item.objects.all()
+            return render(request, 'shopping/searchResult.html', locals())
     return redirect('shopping:index')
 
 def item_detail(request,item_id):
